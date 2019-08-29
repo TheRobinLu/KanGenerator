@@ -1,0 +1,291 @@
+@ECHO OFF
+REM ** This Batch is for PharmaClik Rx stores ONLY.
+SET JobFunction=^^ProjectName^^ - NL DIS - Profiles not displaying due to 1/2 and 1/4 in the sig field
+TITLE %JobFunction%.
+SET BatchLog=C:\ProPharmTemp\^^ProjectName^^.LOG
+SET BatchERR=C:\ProPharmTemp\^^ProjectName^^.ERR
+SET SqlConChk=C:\ProPharmTemp\^^ProjectName^^dB.Conn
+SET SqlSDFLog=C:\ProPharmTemp\^^ProjectName^^SDF.TXT
+SET SqlDBELog=C:\ProPharmTemp\^^ProjectName^^DBE.LOG
+REM If no output file, leave OutputFile set to 'NoOutput' without quotes. Otherwise include full path.
+SET OutputFile=NoOutput
+SET TestVerFile=C:\Temp\TestVer.txt
+::  DeBug=YES   below to cause DeBug Pauses OR the existence of 'C:\ProPharmTemp\KAN00####DeBug.MODE' file.
+SET DeBug=NO
+IF EXIST C:\ProPharmTemp\^^ProjectName^^DeBug.MODE SET DeBug=YES
+::
+IF EXIST %BatchLog% DEL /Q %BatchLog%
+IF EXIST %BatchERR% DEL /Q %BatchERR%
+IF EXIST %SqlConChk% DEL /Q %SqlConChk%
+IF EXIST %SqlSDFLog% DEL /Q %SqlSDFLog%
+IF EXIST %SqlDBELog% DEL /Q %SqlDBELog%
+IF NOT EXIST C:\ProPharmTemp\Done\. MD C:\ProPharmTemp\Done
+IF EXIST C:\ProPharmTemp\Done\^^ProjectName^^.Success DEL /Q C:\ProPharmTemp\Done\^^ProjectName^^.Success
+IF EXIST C:\ProPharmTemp\^^ProjectName^^.DONE DEL /Q C:\ProPharmTemp\^^ProjectName^^.DONE
+IF EXIST C:\ProPharmTemp\condtxt.sql DEL /Q C:\ProPharmTemp\condtxt.sql
+IF EXIST C:\ProPharmtemp\^^ProjectName^^RunProc.TXT DEL C:\ProPharmtemp\^^ProjectName^^RunProc.TXT
+REM ****
+REM ****  ^^ProjectName^^
+REM ****
+REM ****
+REM *0...0....1....1....2....2....3....3....4....4....5....5....6....6....7....7...7
+REM *1234567890123456789012345678901234567890123456789012345678901234567890123456789
+::
+ECHO *** Running ^^ProjectName^^.
+ECHO *** Running ^^ProjectName^^. >> %BatchLog%
+ECHO ***>> %BatchLog%
+ECHO *** %JobFunction%. >> %BatchLog%
+ECHO exit|cmd /q /k prompt *** Starting. (%JobFunction%) $D $T>> %BatchLog%
+ECHO.>> %BatchLog%
+
+IF [%DeBug%] == [YES] ECHO !*! DeBug PAUSE !*!   Prev: Just Started.     Next: Retrieve PID#.
+IF [%DeBug%] == [YES] PAUSE>NUL
+
+::
+
+ECHO *** >> %BatchLog%
+ECHO *** Retrieve PID# (if possible).
+ECHO *** Retrieve PID# (if possible). >> %BatchLog%
+IF NOT EXIST "C:\Program Files\ProPharm\Nexxsys\TPS\TPU.INI" GOTO:NoTPUINI
+SETLOCAL
+IF EXIST TempIni.txt DEL /Q TempIni.txt
+TYPE "C:\Program Files\ProPharm\Nexxsys\TPS\TPU.INI" > TempIni.txt
+FOR /F "tokens=* delims=" %%A IN ('TYPE TempIni.txt ^|FIND "storeid="') DO SET StoreId=%%A
+SET StorePid=%StoreId:~-4%
+IF EXIST TempIni.txt DEL /Q TempIni.txt
+ECHO *** - Store's PID# is : %StorePid%. >> %BatchLog%
+:NoTPUINI
+
+::
+
+ECHO *** >> %BatchLog%
+ECHO *** Detect OS Version (if possible).
+IF [%DeBug%] == [YES] ECHO !*! DeBug PAUSE !*!   Prev: Retrieve PID#.     Next: Detect OS Version.
+IF [%DeBug%] == [YES] PAUSE>NUL
+ECHO *** Detect OS Version (if possible). >> %BatchLog%
+SET WinVer=Unknown
+SET WinVerCode=Unk
+SET WinVerCommonName=Unknown
+IF NOT EXIST C:\Temp\. MD C:\Temp
+IF EXIST %TestVerFile% DEL /Q %TestVerFile%
+VER > %TestVerFile%
+FOR /F "tokens=* delims=" %%A IN ('TYPE %TestVerFile% ^|FIND "Windows "') DO SET WinVer=%%A
+IF EXIST %TestVerFile% DEL /Q %TestVerFile%
+::
+IF ["%WinVer%"] == ["Windows NT Version 4.0  "] SET WinVerCode=NT4
+IF ["%WinVer%"] == ["Windows NT Version 4.0  "] SET WinVerCommonName=WindowsNT4
+IF ["%WinVer%"] == ["Microsoft Windows 2000 [Version 5.00.2195]"] SET WinVerCode=W2K
+IF ["%WinVer%"] == ["Microsoft Windows 2000 [Version 5.00.2195]"] SET WinVerCommonName=Windows2000
+IF ["%WinVer%"] == ["Microsoft Windows XP [Version 5.1.2600]"] SET WinVerCode=WXP
+IF ["%WinVer%"] == ["Microsoft Windows XP [Version 5.1.2600]"] SET WinVerCommonName=WindowsXP
+IF ["%WinVer%"] == ["Microsoft Windows [Version 5.2.3790]"] SET WinVerCode=W2K3
+IF ["%WinVer%"] == ["Microsoft Windows [Version 5.2.3790]"] SET WinVerCommonName=Windows2003
+IF ["%WinVer%"] == ["Microsoft Windows [Version 6.0.6000]"] SET WinVerCode=VSTA
+IF ["%WinVer%"] == ["Microsoft Windows [Version 6.0.6000]"] SET WinVerCommonName=WindowsVista
+IF ["%WinVer%"] == ["Microsoft Windows [Version 6.1.7601]"] SET WinVerCode=W72K8
+IF ["%WinVer%"] == ["Microsoft Windows [Version 6.1.7601]"] SET WinVerCommonName=Windows7or2008Server
+IF ["%WinVer%"] == ["Microsoft Windows [Version 10.0.10240]"] SET WinVerCode=W10
+IF ["%WinVer%"] == ["Microsoft Windows [Version 10.0.10586]"] SET WinVerCode=W10
+IF ["%WinVer%"] == ["Microsoft Windows [Version 10.0.14393]"] SET WinVerCode=W10
+IF ["%WinVer%"] == ["Microsoft Windows [Version 10.0.15063]"] SET WinVerCode=W10
+IF ["%WinVer%"] == ["Microsoft Windows [Version 10.0.16299]"] SET WinVerCode=W10
+IF ["%WinVer%"] == ["Microsoft Windows [Version 10.0.17134]"] SET WinVerCode=W10
+IF ["%WinVer%"] == ["Microsoft Windows [Version 10.0.17736]"] SET WinVerCode=W10
+IF ["%WinVer%"] == ["Microsoft Windows [Version 10.0.18277]"] SET WinVerCode=W10
+IF ["%WinVerCode%"] == ["W10"] SET WinVerCommonName=Windows10
+::
+IF %WinVerCode% == Unk ECHO !! UNKNOWN WINDOWS VERSION !! >> %BatchLog%
+REM IF %WinVerCode% == Unk GOTO:OSError >> %BatchLog%
+ECHO *** - Windows Version Detected is : "%WinVer%" >> %BatchLog%
+ECHO *** - Windows Version Common Name :  %WinVerCommonName% >> %BatchLog%
+ECHO *** - Windows Machine Name        :  %COMPUTERNAME% >> %BatchLog%
+ECHO *** - Windows Logged In User Name :  %USERNAME% >> %BatchLog%
+REM IF %WinVerCode% == NT4 ECHO System is WinNT 4.
+REM IF NOT %WinVerCode% == NT4 ECHO System is beyond WinNT 4 ( 2000, XP, 2003, or Vista).
+
+::
+
+ECHO *** >> %BatchLog%
+ECHO *** Record contents of propharm.ini file to log.
+IF [%DeBug%] == [YES] ECHO !*! DeBug PAUSE !*!   Prev: OS Version.     Next: propharm.ini and Req'd Files.
+IF [%DeBug%] == [YES] PAUSE>NUL
+ECHO *** Record contents of propharm.ini file to log. **BEGIN**.>> %BatchLog%
+IF NOT EXIST "C:\Program Files\ProPharm\propharm.ini" ECHO !!! propharm.ini file NOT FOUND!!>> %BatchLog%
+IF EXIST "C:\Program Files\ProPharm\propharm.ini" TYPE  "C:\Program Files\ProPharm\propharm.ini">> %BatchLog%
+ECHO *** Record contents of propharm.ini file to log. **ENDOF**.>> %BatchLog%
+
+::
+
+ECHO *** >> %BatchLog%
+ECHO *** Checking Required Files.
+ECHO *** Checking Required Files.>> %BatchLog%
+SET ReqdFile=^^ProjectName^^.sql
+IF NOT EXIST C:\ProPharmTemp\%ReqdFile% GOTO:ReqdMisg
+:: COPY 2 LINES ABOVE, TO BELOW THIS LINE, AND ADJUST FOR ANY SUPPORTING FILES.
+
+
+::
+
+:: :: :: :: Do the Big Work :: :: ::
+
+ECHO *** >> %BatchLog%
+ECHO *** Files there, do ISQL  NOW.
+IF [%DeBug%] == [YES] ECHO !*! DeBug PAUSE !*!   Prev: propharm.ini and Req'd Files.     Next: do ISQL.
+IF [%DeBug%] == [YES] PAUSE>NUL
+ECHO *** Files there, do ISQL  NOW. >> %BatchLog%
+REM *--* Running the dBISQL
+REM *--*    If this SQL script is inserting special character(s)
+REM *--*     (like the (R) registered circle), it may need the
+REM *--*     "-codepage 1252"  in the batch call to dBISQL.
+REM *--*     Syntax:      DBISQL C:\ProPharmTemp\Jra00747x.sql -codepage 1252 -q
+ECHO *** - Output from ISQL Captured - BEGIN. (No output here is the usual.)>> %BatchLog%
+REM The default DSN is NEXXSYS. Windows environment variable NEXXSYS_DSN will overwrite this value.
+IF "%NEXXSYS_DSN%"=="" set NEXXSYS_DSN=NEXXSYS
+dbisql -c "DSN=%NEXXSYS_DSN%;uid=installshield;pwd=is2425861p" CALL p_EnableDBA() 
+dbisql -c "DSN=%NEXXSYS_DSN%;uid=dba;pwd=sql" -codepage 1252 read c:\ProPharmTemp\^^ProjectName^^.sql
+IF ERRORLEVEL 1 GOTO:ISQLFail
+ECHO *** - Output from ISQL Captured - EndOf -ISQL Good. >> %BatchLog%
+::
+ECHO *** %JobFunction% Done Successfully. > C:\ProPharmTemp\Done\^^ProjectName^^.Success
+IF EXIST C:\ProPharmTemp\Utils\DTStamp32.exe C:\ProPharmTemp\Utils\DTStamp32.exe >> C:\ProPharmTemp\Done\^^ProjectName^^.Success
+ECHO *** Successfully Finished %JobFunction% >> C:\ProPharmTemp\Done\^^ProjectName^^.Success
+ECHO.>> %BatchLog%
+ECHO *** Successfully Finished %JobFunction% >> %BatchLog%
+ECHO *** Successfully Finished %JobFunction%
+
+IF EXIST C:\ProPharmtemp\^^ProjectName^^RunProc.TXT GOTO:RunProc
+IF NOT Exist C:\ProPharmtemp\^^ProjectName^^RunProc.TXT GOTO:NORunProc
+
+
+:RunProc
+
+ECHO *** Stop Services >> %BatchLog%
+^^StopServices^^
+ECHO *** Services Stopped  >> %BatchLog%
+
+ECHO *** Copy Files >> %BatchLog%
+^^CopyFile^^
+ECHO *** Copying Files completed >> %BatchLog%
+
+ECHO *** Restart Services >> %BatchLog%
+^^ResumeService^^
+ECHO *** Services Restarted  >> %BatchLog%
+
+ECHO *** Run Query >> %BatchLog%
+^^RunQuery^^
+ECHO *** Run Query completed >> %BatchLog%
+
+:NORunProc
+ECHO *** - Output from ISQL Captured - EndOf -ISQL Good. >> %BatchLog%
+::
+ECHO *** %JobFunction% Done Successfully. > C:\ProPharmTemp\Done\^^ProjectName^^.Success
+IF EXIST C:\ProPharmTemp\Utils\DTStamp32.exe C:\ProPharmTemp\Utils\DTStamp32.exe >> C:\ProPharmTemp\Done\^^ProjectName^^.Success
+ECHO *** Successfully Finished %JobFunction% >> C:\ProPharmTemp\Done\^^ProjectName^^.Success
+ECHO.>> %BatchLog%
+ECHO *** Successfully Finished %JobFunction% >> %BatchLog%
+ECHO *** Successfully Finished %JobFunction%
+GOTO:Skp^^ProjectName^^
+
+
+::
+:: :: :: :: ERROR HANDLING :: :: ::
+
+:ReqdMisg
+ECHO.>> %BatchLog%
+ECHO !!! Required file Missing for %JobFunction% (%ReqdFile%)>> %BatchLog%
+ECHO !!! Required file Missing for %JobFunction% (%ReqdFile%)>> %BatchERR%
+GOTO:SkpLogrs
+
+::
+
+:ISQLFail
+ECHO.>> %BatchLog%
+ECHO *** - Output from ISQL Captured - EndOf -ISQLFail. >> %BatchLog%
+ECHO !!!>> %BatchLog%
+ECHO !!! Failure of ISQL for %JobFunction%>> %BatchLog%
+ECHO !!! Failure of ISQL for %JobFunction%>> %BatchERR%
+IF NOT EXIST %SqlConChk% ECHO !!! SQL CONNECTION TO DB FAILED !!!>> %BatchLog%
+IF NOT EXIST %SqlConChk% ECHO !!! - Unable to connect to the database via 'tech' account.>> %BatchLog%
+IF NOT EXIST %SqlConChk% ECHO !!! - Please Check permissions and password.>> %BatchLog%
+IF NOT EXIST %SqlConChk% ECHO !!! SQL CONNECTION TO DB FAILED !!!>> %BatchERR%
+IF NOT EXIST %SqlConChk% ECHO !!! - Unable to connect to the database via 'tech' account.>> %BatchERR%
+IF NOT EXIST %SqlConChk% ECHO !!! - Please Check permissions and password.>> %BatchERR%
+IF NOT EXIST %SqlConChk% ECHO !!! **dBEngineLog and SqlDecisionFlow will not exist.>> %BatchLog%
+IF NOT EXIST %SqlConChk% GOTO:SkpLogrs
+GOTO:Skp^^ProjectName^^
+
+::
+:: :: :: :: Final Tasks :: :: :: ::
+
+:Skp^^ProjectName^^
+IF [%DeBug%] == [YES] ECHO !*! DeBug PAUSE !*!   Prev: do ISQL.     Next: Final Tasks.
+IF [%DeBug%] == [YES] PAUSE>NUL
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+IF EXIST %SqlConChk% ECHO *** SQL Connection Check was Successful.>> %BatchLog%
+IF EXIST %SqlConChk% TYPE %SqlConChk%>> %BatchLog%
+IF EXIST %SqlConChk% DEL /Q %SqlConChk%>> %BatchLog%
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+::
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+IF NOT EXIST %SqlSDFLog% ECHO !!! %SqlSDFLog% DOES NOT EXIST !!!>> %BatchLog%
+IF NOT EXIST %SqlSDFLog% ECHO !!! - - This is typical if the dBISQL failed.>> %BatchLog%
+IF EXIST %SqlSDFLog% ECHO *** SqlDecisionFlow . . Begins>> %BatchLog%
+IF EXIST %SqlSDFLog% TYPE %SqlSDFLog%>> %BatchLog%
+IF EXIST %SqlSDFLog% ECHO *** SqlDecisionFlow . . Ends>> %BatchLog%
+IF EXIST %SqlSDFLog% DEL /Q %SqlSDFLog%>> %BatchLog%
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+::
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+IF NOT EXIST %SqlDBELog% ECHO !!! %SqlDBELog% DOES NOT EXIST !!!>> %BatchLog%
+IF NOT EXIST %SqlDBELog% ECHO !!! - - This is typical if the dBISQL failed.>> %BatchLog%
+IF EXIST %SqlDBELog% ECHO *** SqldBEngineLog . . Begins>> %BatchLog%
+IF EXIST %SqlDBELog% TYPE %SqlDBELog%>> %BatchLog%
+IF EXIST %SqlDBELog% ECHO.>> %BatchLog%
+IF EXIST %SqlDBELog% ECHO ***>> %BatchLog%
+IF EXIST %SqlDBELog% ECHO *** SqldBEngineLog . . Ends>> %BatchLog%
+IF EXIST %SqlDBELog% DEL /Q %SqlDBELog%>> %BatchLog%
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+
+
+:SkpLogrs
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+::
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+IF [%OutputFile%] == [NoOutput] ECHO *** Job has No Output file.>> %BatchLog%
+IF [%OutputFile%] == [NoOutput] GOTO:EndOutput
+IF EXIST %OutputFile% ECHO *** Output file was Created.>> %BatchLog%
+IF NOT EXIST %OutputFile% ECHO !!! Output file IS MISSING.>> %BatchLog%
+
+
+:EndOutput
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+::
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+IF NOT EXIST C:\ProPharmTemp\condtxt.sql ECHO *** No 'condtxt.sql' found.>> %BatchLog%
+IF EXIST C:\ProPharmTemp\condtxt.sql ECHO *** Contents of 'condtxt.sql'.>> %BatchLog%
+IF EXIST C:\ProPharmTemp\condtxt.sql TYPE C:\ProPharmTemp\condtxt.sql>> %BatchLog%
+IF EXIST C:\ProPharmTemp\condtxt.sql DEL /Q C:\ProPharmTemp\condtxt.sql>> %BatchLog%
+ECHO *** *** *** *** *** *** *** *** *** *** *** *** >> %BatchLog%
+
+::
+:: :: :: :: Clean Up :: :: :: ::
+
+IF [%DeBug%] == [YES] ECHO !*! DeBug PAUSE !*!   Prev: Final Tasks.     Next: Ending Tasks.
+IF [%DeBug%] == [YES] PAUSE>NUL
+
+^^CleanUp^^
+
+:: COPY the DEL LINE ABOVE, TO BELOW THIS LINE, AND ADJUST FOR ANY SUPPORTING FILES.
+
+
+::
+
+ECHO exit|cmd /q /k prompt *** Done. (%JobFunction%) $D $T>> %BatchLog%
+ECHO.>> %BatchLog%
+ECHO exit|cmd /q /k prompt *** Done. (%JobFunction%) $D $T>> C:\ProPharmTemp\^^ProjectName^^.Done
+ECHO.>> C:\ProPharmTemp\^^ProjectName^^.Done
+ECHO *** %JobFunction% Done.
+IF EXIST C:\DelPFile.bat C:\DELPFILE ProPharm 13579 C:\ProPharmTemp\^^ProjectName^^.bat
+IF EXIST C:\ProPharmtemp\Utils\DelPFile.bat C:\ProPharmtemp\Utils\DELPFILE ProPharm 13579 C:\ProPharmTemp\^^ProjectName^^.bat
+EXIT

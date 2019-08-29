@@ -9,12 +9,12 @@
     <h2> Recent...</h2>
   
     <tbody>
-      <tr *ngFor='let kanJob of recentKans; let i=index'>
-        <td *ngIf="i<5"> <a  style='margin: 20px' class='nav-link' [routerLink]="['/Project']">
+      <tr *ngFor='let kanJob of recentKans; let i=index' >
+        <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/Project']">
             {{kanJob.projectId}}</a> </td> 
-        <td *ngIf="i<5"> <a  style='margin: 20px' class='nav-link' [routerLink]="['/Project']">
+        <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/Project']">
             {{kanJob.projectName}}</a> </td>
-        <td *ngIf="i<5"> <a  style='margin: 20px' class='nav-link' [routerLink]="['/Project']">
+        <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/Project']">
             {{kanJob.description}}</a> </td>
       </tr>
   

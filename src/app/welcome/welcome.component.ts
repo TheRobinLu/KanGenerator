@@ -31,6 +31,7 @@ export class WelcomeComponent implements OnInit {
          
         return new Date(b.lastOpen ).getTime() - new Date(a.lastOpen).getTime()})},
         error => this.errorMessage = <any>error
+        
     );
   }
 
