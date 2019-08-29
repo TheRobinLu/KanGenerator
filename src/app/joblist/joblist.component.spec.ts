@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KanFormComponent } from './kan-form.component';
+import { JoblistComponent } from './joblist.component';
 
-describe('KanFormComponent', () => {
-  let component: KanFormComponent;
-  let fixture: ComponentFixture<KanFormComponent>;
+describe('JoblistComponent', () => {
+  let component: JoblistComponent;
+  let fixture: ComponentFixture<JoblistComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ KanFormComponent ]
+      declarations: [ JoblistComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(KanFormComponent);
+    fixture = TestBed.createComponent(JoblistComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

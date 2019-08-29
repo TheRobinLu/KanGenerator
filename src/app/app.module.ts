@@ -7,13 +7,15 @@ import { HttpClientModule} from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { KanFormComponent } from './kan-form/kan-form.component';
+import { KanbanComponent } from './kanban/kanban.component';
+import { JoblistComponent } from './joblist/joblist.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomeComponent,
-    KanFormComponent
+    KanbanComponent,
+    JoblistComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +24,8 @@ import { KanFormComponent } from './kan-form/kan-form.component';
     HttpClientModule,
     RouterModule.forRoot([
       {path:'welcome', component: WelcomeComponent},
-      { path: '**', redirectTo: 'welcome', pathMatch: 'full' }])
+      {path:'kanban', component: KanbanComponent},
+      {path: '**', redirectTo: 'welcome', pathMatch: 'full' }])
   ],
   providers: [],
   bootstrap: [AppComponent]
