@@ -1,37 +1,51 @@
 <form>
     <div class= "container">
-        <div class = "row d-flex justify-content-left text-left">
-            <div class="col-md-3">Kan ID</div>
+        <div class = "row my-2 d-flex justify-content-left text-left">
+            <div class="col-md-2">Kan ID</div>
             <input class="col-md-2" placeholder="###"/>  
-            <div class="col-md-3">Kan Name</div>
+            <div class="col-md-2"></div>
+            <div class="col-md-2">Kan Name</div>
             <input class="col-md-4" placeholder="KAN######"/>  
 
 
         </div>
+        <div class = "row  my-2 d-flex justify-content-left text-left">
+            <div class="col-md-2">Database Version</div>
+            <input class="col-md-10" placeholder="Database Version"/>  
 
-        <div class = "row d-flex justify-content-left text-left">
+        </div>
+        <div class = "row  my-2 d-flex justify-content-left text-left">
             <div class="col-md-3">Description</div>
             <input class="col-md-12" placeholder="Description"/>  
 
         </div>
 
-        <div class = "row d-flex justify-content-left text-left">
+
+
+        <div class = "row  my-2 d-flex justify-content-left text-left">
             <div class="col-md-3">Script for stoping Services</div>
-     
+            <textarea class="form-control" rows="5"></textarea>
         </div>   
  
-        <div class = "row d-flex justify-content-left text-left">
-            <!-- <md-input-container fxFlex="18" fxFlexOffset="1">
-                <textarea  mdInput placeholder="Script" ></textarea>
-                  <md-error>This field is required</md-error>
-            </md-input-container> -->
+        <div class = "row  my-2 d-flex justify-content-left text-left">
+            <div class="col-md-3">Script for copying files</div>
+            <textarea class="form-control" rows="5"></textarea>           
         </div>      
- 
-
+  
+        <div class = "row  my-2 d-flex justify-content-left text-left">
+            <div class="col-md-3">Script for running query</div>
+            <textarea class="form-control" rows="5"></textarea>           
+        </div>      
+        <div class = "row  my-2 d-flex justify-content-left text-left">
+            <div class="col-md-3">Script for resuming services</div>
+            <textarea class="form-control" rows="5"></textarea>           
+        </div>    
     </div>
 
     <div>
-        <button class = "btn btn-primary">Save</button>
-        <button class = "btn btn-primary">Generate</button>
+        <button class = "btn btn-primary mx-1">Save</button>
+        <button class = "btn btn-primary mx-1">Clone</button>
+
+        <button class = "btn btn-primary mx-1">Generate</button>
     </div>
 </form> 
