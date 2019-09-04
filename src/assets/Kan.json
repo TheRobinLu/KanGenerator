@@ -1,0 +1,28 @@
+[
+    {
+        "projectId": 744,
+        "projectName": "KAN00744",
+        "description": "Turn on Trade in Flag",
+        "lastOpen": "2012/04/30 10:14:23",
+        "stopService": "iisReset \n taskkill /f tps",
+        "copyFile": "Xcopy C:\\TPS\\*.* C:\\Program Files\\TPS\\",
+        "runQuery": "dbisql .... ...sql",
+        "resumeService": "iisReset \n TPS.exe",
+        "cleanUp": "Delete ....bat \n Delete ....,.sql",
+        "modificationHistory": "Robin Lu  Sep 24 2019     2.5.0.0     KAN00987 remove restriction for drug",
+        "dbVersion": " '8.2 - 09', '8.4 - 01', '8.4 - 02' "
+    },
+    {
+        "projectId": 712,
+        "projectName": "KAN00712",
+        "description": "AB DIS HF1 postInstall",
+        "lastOpen": "2016/04/23 11:14:23",
+        "stopService": "iisReset \n taskkill /f tps",
+        "copyFile": "Xcopy C:\\TPS\\*.* C:\\Program Files\\TPS\\",
+        "runQuery": "dbisql .... ...sql",
+        "resumeService": "iisReset \n TPS.exe",
+        "cleanUp": "Delete ....bat \n Delete ....,.sql",
+        "modificationHistory": "Robin Lu  Sep 24 2019     2.5.0.0     KAN00987 remove restriction for drug",
+        "dbVersion": " '8.2 - 09', '8.4 - 01', '8.4 - 02' "
+    }
+]

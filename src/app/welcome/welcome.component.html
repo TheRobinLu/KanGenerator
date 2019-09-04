@@ -10,11 +10,11 @@
 
   <tbody>
     <tr *ngFor='let kanJob of recentKans; let i=index' >
-      <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban']">
+      <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId ]">
           {{kanJob.projectId}}</a> </td> 
-      <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban']">
+      <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId]">
           {{kanJob.projectName}}</a> </td>
-      <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban']">
+      <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId]">
           {{kanJob.description}}</a> </td>
     </tr>
 

@@ -17,7 +17,7 @@ import {map, filter} from 'rxjs/operators';
 export class WelcomeComponent implements OnInit {
 
   recentKans: IRecentKan[];
-  LastRecents: IRecentKan[];
+  //LastRecents: IRecentKan[];
   errorMessage: string;
 
   constructor(private recentKansService: RecentKansService){

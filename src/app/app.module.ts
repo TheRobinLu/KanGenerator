@@ -24,7 +24,7 @@ import { JoblistComponent } from './joblist/joblist.component';
     HttpClientModule,
     RouterModule.forRoot([
       {path:'welcome', component: WelcomeComponent},
-      {path:'kanban', component: KanbanComponent},
+      {path:'kanban/:id', component: KanbanComponent},
       {path: '**', redirectTo: 'welcome', pathMatch: 'full' }])
   ],
   providers: [],
