@@ -6,6 +6,7 @@ import { map, filter } from 'rxjs/operators';
 import { IKan } from '../Interface/IKan';
 import { ActivatedRoute } from '@angular/router';
 import { KanDetailService } from '../Service/kan-detail.service';
+import { Alert } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-kanban',
@@ -31,10 +32,14 @@ export class KanbanComponent implements OnInit {
   }
 
   Save(): boolean {
+    this.kan.cleanUp = "skjdhkjhjdekjh";
     return true;
   }
 
-  Clone() { }
+  Clone() { 
+    this.kan.projectId = null;
+    this.kan.projectName = "";
+  }
 
   Generate() { }
 
