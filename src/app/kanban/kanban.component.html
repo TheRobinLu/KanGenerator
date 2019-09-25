@@ -26,7 +26,7 @@
 
         <div class="row  my-2 d-flex justify-content-left text-left">
             <div class="col-md-3">modification History</div>
-            <textarea class="form-control" rows="5"
+            <textarea class="form-control" rows="3"
                 placeholder="Sep 3, 2000    Jams Bond   2.5.0.2     KAN000126 Add new DB script" type="text"
                 name="modificationHistory"
                 [(ngModel)]="kan.modificationHistory">Date        Developer       Version     comments</textarea>
@@ -34,27 +34,30 @@
 
         <div class="row  my-2 d-flex justify-content-left text-left">
             <div class="col-md-3">Script for stoping Services</div>
-            <textarea class="form-control" rows="5" type="text" name="stopServices"
+            <div class="col-md-3"></div>
+            <div class="col-md-3">Script for copying files</div>
+            <textarea class="form-control col-md-5" rows="3" type="text" name="stopServices"
                 [(ngModel)]="kan.stopServices"></textarea>
+            <div class="col-md-1"></div>
+            <textarea class="form-control  col-md-6" rows="3" type="text" name="copyFile" [(ngModel)]="kan.copyFile"></textarea>
         </div>
 
-        <div class="row  my-2 d-flex justify-content-left text-left">
-            <div class="col-md-3">Script for copying files</div>
-            <textarea class="form-control" rows="5" type="text" name="copyFile" [(ngModel)]="kan.copyFile"></textarea>
-        </div>
+
 
         <div class="row  my-2 d-flex justify-content-left text-left">
             <div class="col-md-3">Script for running query</div>
-            <textarea class="form-control" rows="5" type="text" name="runQuery" [(ngModel)]="kan.runQuery"></textarea>
-        </div>
-        <div class="row  my-2 d-flex justify-content-left text-left">
+            <div class="col-md-3"></div>
             <div class="col-md-3">Script for resuming services</div>
-            <textarea class="form-control" rows="5" type="text" name="resumeService"
-                [(ngModel)]="kan.resumeService"></textarea>
+            <textarea class="form-control col-md-5" rows="3" type="text" name="runQuery" 
+                [(ngModel)]="kan.runQuery"></textarea>
+            <div class="col-md-1"></div>
+            <textarea class="form-control col-md-6" rows="3" type="text" name="resumeService"
+            [(ngModel)]="kan.resumeService"></textarea>
         </div>
+
         <div class="row  my-2 d-flex justify-content-left text-left">
             <div class="col-md-3">Script for cleaning up</div>
-            <textarea class="form-control" rows="5" type="text" name="cleanUp" [(ngModel)]="kan.cleanUp"></textarea>
+            <textarea class="form-control" rows="3" type="text" name="cleanUp" [(ngModel)]="kan.cleanUp"></textarea>
         </div>
     </div>
 
