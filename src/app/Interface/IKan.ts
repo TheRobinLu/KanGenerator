@@ -9,5 +9,7 @@ export interface IKan{
     runQuery: string,
     cleanUp: string,
     modificationHistory: string,
-    dBVersion: string
+    dBVersion: string,
+    status: string
+     
 }
