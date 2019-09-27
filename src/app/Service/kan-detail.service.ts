@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap, map, filter} from 'rxjs/operators';
 
@@ -14,6 +14,20 @@ export class KanDetailService {
 
   private KanFile = 'assets/Kan.json';
   private KanUrl = 'https://localhost:44358/Kans/';
+  // private httpOption = {
+  //   headers: new HttpHeaders({
+  //   'Server': 'Microsoft-IIS/10.0',
+  //   'X-Powered-By': 'ASP.NET'})
+  // };
+
+  public httpOption = {
+    headers: new HttpHeaders({
+      'Access-Control-Allow-Origin': "https://localhost:44358",
+      'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
+      'Access-Control-Max-Age': '86400'
+    })
+  };
+
   allKans: Observable<IKan[]>;
   kan:IKan;
   getKanJson(id:number):Observable<IKan> {
@@ -32,21 +46,25 @@ export class KanDetailService {
   }
 
   updateKan(kan: IKan ): Observable<IKan> {
-    return this.http.put<IKan>(this.KanUrl, kan)
+    return this.http.put<IKan>(this.KanUrl + kan.projectId.toString() , kan, this.httpOption)
       .pipe(
+        tap(data => console.log(`Updated kan is ${JSON.stringify(data)}`)),
+
         catchError(this.handleError)
       );
   }
 
   addKan(kan: IKan ): Observable<IKan> {
-    return this.http.post<IKan>(this.KanUrl, kan)
+    return this.http.post<IKan>(this.KanUrl, JSON.stringify(kan), this.httpOption)
+    //return this.http.post<IKan>(this.KanUrl, kan, this.httpOption)
       .pipe(
+        tap(data => console.log(`Updated kan is ${JSON.stringify(data)}`)),
         catchError(this.handleError)
       );
   }
 
   deleteKan(id: number ): Observable<IKan> {
-    return this.http.delete<IKan>(this.KanUrl+ id.toString())
+    return this.http.delete<IKan>(this.KanUrl+ id.toString() )
       .pipe(
         catchError(this.handleError)
       );
@@ -59,9 +77,9 @@ export class KanDetailService {
       errorMessage = `An error occurred: ${err.error.message}`;
     } else {
       errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
-    }
+    };
 
-    console.error(err)
+    console.error(err);
     return throwError(errorMessage);
   }
 

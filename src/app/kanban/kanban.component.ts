@@ -32,13 +32,21 @@ export class KanbanComponent implements OnInit {
   }
 
   Save(): boolean {
-    this.kan.cleanUp = "skjdhkjhjdekjh";
+    if(this.kan.status == "New")
+    {
+      this.kanDetailService.addKan(this.kan).subscribe();
+    }
+    else
+    {
+      this.kanDetailService.updateKan(this.kan).subscribe() ;
+    }
     return true;
   }
 
   Clone() { 
     this.kan.projectId = null;
     this.kan.projectName = "";
+    this.kan.status = "New";
   }
 
   Generate() { }
