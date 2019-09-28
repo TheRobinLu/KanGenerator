@@ -11,5 +11,4 @@ export interface IKan{
     modificationHistory: string,
     dBVersion: string,
     status: string
-     
 }
