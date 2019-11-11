@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 
 
 import { RecentKansService} from '../Service/recent-kans.service';
+import { KanGApiService} from '../Service/kan-gapi.service';
 import {IRecentKan} from '../Interface/IRecentKan';
 
 import { Observable } from 'rxjs';
@@ -12,7 +13,7 @@ import {map, filter} from 'rxjs/operators';
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.css'],
-  providers: [RecentKansService]
+  providers: [KanGApiService]
 })
 export class WelcomeComponent implements OnInit {
 
@@ -20,13 +21,13 @@ export class WelcomeComponent implements OnInit {
   //LastRecents: IRecentKan[];
   errorMessage: string;
 
-  constructor(private recentKansService: RecentKansService){
+  constructor(private kanGApiService: KanGApiService){
 
   }
 
 
   ngOnInit() {
-    this.recentKansService.getRecentKans().subscribe(
+    this.kanGApiService.getRecentKans().subscribe(
       // tslint:disable-next-line: no-shadowed-variable
       // tslint:disable-next-line: only-arrow-functions
 

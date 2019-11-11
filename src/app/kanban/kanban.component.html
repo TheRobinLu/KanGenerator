@@ -1,58 +1,148 @@
+<br><br><br>
+
 <form>
+
+
     <div class="container">
         <div class="row my-2 d-flex justify-content-left text-left">
             <div class="col-md-2">Kan ID</div>
-            <input class="col-md-2" placeholder="###" type="int" name="projectID" [(ngModel)]="kan.projectId" />
+            <input class="col-md-2" placeholder="###" type="int" name="projectID" required [(ngModel)]="kan.projectId" />
             <div class="col-md-2"></div>
             <div class="col-md-2">Kan Name</div>
-            <input class="col-md-4" placeholder="KAN######" type="text" name="projectName"
+            <input class="col-md-4  px-3" placeholder="KAN######" type="text" name="projectName"
                 [(ngModel)]="kan.projectName" />
-
-
+  
         </div>
+
         <div class="row  my-2 d-flex justify-content-left text-left">
             <div class="col-md-2">Database Version</div>
-            <input class="col-md-10" placeholder="Database Version" type="text" name="dBVersion"
+            <input class="col-md-10  px-3" placeholder="Database Version" type="text" name="dBVersion"
                 [(ngModel)]="kan.dBVersion" />
 
+            <ul class="list-inline" *ngFor="let dbver of dbversions; let i = index" >
+                <li class="list-inline-item">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="{{dbver.version}}" class="custom-control-input" 
+                                id="{{dbver.version}}" [checked]="dbver.compatible"
+                                (change) = "dbver.compatible = !dbver.compatible " 
+                                (change) = "dbVersionChecked() " 
+                                 >
+                        <label class="custom-control-label  mx-3" for="{{dbver.version}}">{{dbver.version}} 
+                            </label>
+                    </div>
+                </li>
+            </ul>    
         </div>
-        <div class="row  my-2 d-flex justify-content-left text-left">
-            <div class="col-md-3">Description</div>
-            <input class="col-md-12" placeholder="Description" type="text" name="description"
-                [(ngModel)]="kan.description" />
-
-        </div>
-
-
-        <div class="row  my-2 d-flex justify-content-left text-left">
-            <div class="col-md-3">modification History</div>
-            <textarea class="form-control" rows="3"
-                placeholder="Sep 3, 2000    Jams Bond   2.5.0.2     KAN000126 Add new DB script" type="text"
-                name="modificationHistory"
-                [(ngModel)]="kan.modificationHistory">Date        Developer       Version     comments</textarea>
-        </div>
-
-        <div class="row  my-2 d-flex justify-content-left text-left">
-            <div class="col-md-3">Script for stoping Services</div>
-            <div class="col-md-3"></div>
-            <div class="col-md-3">Script for copying files</div>
-            <textarea class="form-control col-md-5" rows="3" type="text" name="stopServices"
-                [(ngModel)]="kan.stopServices"></textarea>
-            <div class="col-md-1"></div>
-            <textarea class="form-control  col-md-6" rows="3" type="text" name="copyFile" [(ngModel)]="kan.copyFile"></textarea>
-        </div>
-
+        <!-- {{dbversions|json}} -->
 
 
         <div class="row  my-2 d-flex justify-content-left text-left">
-            <div class="col-md-3">Script for running query</div>
-            <div class="col-md-3"></div>
-            <div class="col-md-3">Script for resuming services</div>
-            <textarea class="form-control col-md-5" rows="3" type="text" name="runQuery" 
-                [(ngModel)]="kan.runQuery"></textarea>
-            <div class="col-md-1"></div>
-            <textarea class="form-control col-md-6" rows="3" type="text" name="resumeService"
-            [(ngModel)]="kan.resumeService"></textarea>
+            <div class="col-md-6 px-3">
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <div class="col-md-3">Description</div>
+                    <textarea class="form-control" rows="3" 
+                        placeholder="Description" type="text" name="description"
+                        [(ngModel)]="kan.description" >
+                    </textarea>
+
+
+                </div>
+            </div>
+            <!-- <div class="col-md-1"></div> -->
+            <div class="col-md-6 px-3">
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <div class="col-md-6">Modification History</div>
+                    <textarea class="form-control" rows="3"
+                        placeholder="Sep 3, 2000    Jams Bond   2.5.0.2     KAN000126 Add new DB script" type="text"
+                        name="modificationHistory"
+                        [(ngModel)]="kan.modificationHistory">Date        Developer       Version     Comments</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row  my-2 d-flex justify-content-left text-left">
+
+            <div class="col-md-6 px-3">
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <div class="col-md-12">Script for stoping Services</div>
+                    <textarea class="form-control col-md-12" rows="3" type="text" name="stopServices"
+                    [(ngModel)]="kan.stopServices"></textarea>
+                </div>
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <ul class="list-inline" *ngFor="let stopSv of StopServices; let i = index" >
+                        <li class="list-inline-item">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="{{stopSv.serviceName}}" class="custom-control-input" 
+                                        id="{{stopSv.serviceName}}" [checked]="stopSv.onOff"
+                                        (change) = "stopSv.onOff = !stopSv.onOff " 
+                                        (change) = "stopServiceChecked() " 
+                                            >
+                                <label class="custom-control-label  mx-3" for="{{stopSv.serviceName}}">{{stopSv.serviceName}} 
+                                    </label>
+                            </div>
+                        </li>
+                    </ul> 
+                </div>
+
+
+
+            </div>
+            <div class="col-md-6 px-3">
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <div class="col-md-12">Script for resuming services</div>
+                    <textarea class="form-control col-md-12" rows="3" type="text" name="resumeService"
+                    [(ngModel)]="kan.resumeServices"></textarea>
+                </div>
+                <div class="row  my-2 ">
+                    <ul class="list-inline" *ngFor="let resumeSv of ResumeServices; let i = index" >
+                        <li class="list-inline-item">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="{{resumeSv.serviceName}}" class="custom-control-input" 
+                                        id="{{resumeSv.serviceName}}-" [checked]="resumeSv.onOff"
+                                        (change) = "resumeSv.onOff = !resumeSv.onOff " 
+                                        (change) = "resumeServiceChecked() " 
+                                            >
+                                <label class="custom-control-label  mx-3" for="{{resumeSv.serviceName}}-">{{resumeSv.serviceName}} 
+                                    </label>
+                            </div>
+                        </li>
+                    </ul> 
+
+                </div>
+
+
+
+
+            </div>   
+
+        </div>
+
+
+
+        <div class="row  my-2 d-flex justify-content-left text-left">
+            <div class="col-md-6 px-3">
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <div class="col-md-10">Script for running query</div>
+                    <div class="col-md-2">
+                        <button class="fa fa-database  text-primary" (click)="getQuery()">
+
+                        </button>
+                    </div>
+                    <textarea class="form-control col-md-12" rows="3" type="text" name="runQuery" 
+                        [(ngModel)]="kan.runQuery"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6 px-3">
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <div class="col-md-10">Script for copying files</div>
+                    <div class="col-md-2"> 
+                        <button class="fa fa-file-text text-primary" (click)="getQuery()" >
+
+                        </button> 
+                    </div>
+                    <textarea class="form-control  col-md-12" rows="3" type="text" name="copyFile" [(ngModel)]="kan.copyFile"></textarea>
+                </div>
+            </div>
         </div>
 
         <div class="row  my-2 d-flex justify-content-left text-left">
@@ -61,12 +151,10 @@
         </div>
     </div>
 
-    
-
-    <div>
+ 
+    <div class="fixed-bottom mb-5 pb-3" >
         <button class="btn btn-primary mx-1" (click)="Save()">Save</button>
         <button class="btn btn-primary mx-1" (click)="Clone()" >Clone</button>
-
         <button class="btn btn-primary mx-1" (click)="Generate()">Generate</button>
     </div>
 

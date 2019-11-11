@@ -167,13 +167,14 @@ ECHO *** Copy Files >> %BatchLog%
 ^^CopyFile^^
 ECHO *** Copying Files completed >> %BatchLog%
 
+ECHO *** Run Query >> %BatchLog%
+^^RunQuery^^
+ECHO *** Run Query completed >> %BatchLog%
+
 ECHO *** Restart Services >> %BatchLog%
 ^^ResumeService^^
 ECHO *** Services Restarted  >> %BatchLog%
 
-ECHO *** Run Query >> %BatchLog%
-^^RunQuery^^
-ECHO *** Run Query completed >> %BatchLog%
 
 :NORunProc
 ECHO *** - Output from ISQL Captured - EndOf -ISQL Good. >> %BatchLog%

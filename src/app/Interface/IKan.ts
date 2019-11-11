@@ -5,7 +5,7 @@ export interface IKan{
     lastOpen: Date,
     stopServices: string,
     copyFile: string,
-    resumeService: string,
+    resumeServices: string,
     runQuery: string,
     cleanUp: string,
     modificationHistory: string,

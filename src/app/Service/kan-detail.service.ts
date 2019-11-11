@@ -13,7 +13,7 @@ import {IKan} from '../Interface/IKan';
 export class KanDetailService {
 
   private KanFile = 'assets/Kan.json';
-  private KanUrl = 'https://localhost:44358/Kans/';
+  private KanUrl = 'http://localhost:7361/Kans/';
   // private httpOption = {
   //   headers: new HttpHeaders({
   //   'Server': 'Microsoft-IIS/10.0',
@@ -30,7 +30,9 @@ export class KanDetailService {
 
   allKans: Observable<IKan[]>;
   kan:IKan;
-  getKanJson(id:number):Observable<IKan> {
+
+  /*this function is isolated*/
+  getKanJson(id:number):Observable<IKan> { 
     return this.http.get<IKan[]>(this.KanFile).pipe(
       map(ks => ks.find(k => k.projectId===id) ),
       tap(data => console.log('All: ' + JSON.stringify(data)))/*,
@@ -46,7 +48,7 @@ export class KanDetailService {
   }
 
   updateKan(kan: IKan ): Observable<IKan> {
-    return this.http.put<IKan>(this.KanUrl + kan.projectId.toString() , kan, this.httpOption)
+    return this.http.put<IKan>(this.KanUrl + kan.projectId.toString() , kan)
       .pipe(
         tap(data => console.log(`Updated kan is ${JSON.stringify(data)}`)),
 

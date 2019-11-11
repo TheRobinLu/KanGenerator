@@ -1,1 +1,30 @@
-<p>joblist works!</p>
+<div>
+    <h2> KanBan Job List</h2>
+    <ul class='nav nav-pills'>
+      <li><a class='nav-link' [routerLink]="['/Kan']"  >New Kanban Job</a></li>
+    </ul>
+  </div>
+  
+  <div>
+   
+    <tbody>
+      <tr *ngFor='let kanJob of recentKans; let i=index' >
+        <td > <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId ]">
+            {{kanJob.projectId}}</a> </td> 
+        <td > <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId]">
+            {{kanJob.projectName}}</a> </td>
+        <td > <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId]">
+            {{kanJob.description}}</a> </td>
+        <td> <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId]">
+            {{kanJob.lastOpen }}</a> </td>
+      </tr>
+  
+      <br>
+
+  
+    </tbody>
+  
+  
+  </div>
+  
+  
