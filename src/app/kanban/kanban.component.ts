@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { FormBuilder, FormGroup, FormArray, FormControl, ValidatorFn } from '@angular/forms';
+// import { MatDialogModule} from "@angular/material/badge"; 
+
+
 
 import { IKan } from '../Interface/IKan';
 import { ActivatedRoute } from '@angular/router';
@@ -9,7 +12,8 @@ import { KanGApiService } from "../Service/kan-gapi.service";
 import { Alert } from 'selenium-webdriver';
 import { IDBVersion } from '../Interface/IDBVersion';
 import { IService } from '../Interface/IService';
-
+import { IFile } from '../Interface/IFile';
+  
 @Component({
   selector: 'app-kanban',
   templateUrl: './kanban.component.html',
@@ -22,6 +26,9 @@ export class KanbanComponent implements OnInit {
   dbversions: IDBVersion[];
   StopServices: IService[];
   ResumeServices: IService[];
+  AllFiles: IFile[];
+  CopyFiles: IFile[];
+  SQLFiles: IFile[];
   errorMessage: string;
   id: number = 0;
   test: string = "";
@@ -36,8 +43,6 @@ export class KanbanComponent implements OnInit {
     ) {
 
   }
-
-
 
 
   ngOnInit() {
@@ -135,8 +140,63 @@ export class KanbanComponent implements OnInit {
 
   }
 
+  getFiles(fileType: string ){
+    //fileType: SQL, PRG, BAT, ALL
+
+    this.kanApiService.getFile(this.kan.projectName).subscribe(
+        a => { this.AllFiles = a ;
+            this.postgetFile(fileType)
+          });
+    // this.kanApiService.getFile(this.kan.projectName).
+    //   then(files => files.fill ) ;
+   
+     
+  }
+
+  postgetFile(fileType: string)
+  {
+    let sortfiles = this.AllFiles.sort((a,b) => 
+        { if (a.fileOrPath > b.fileOrPath)
+          { 
+            return -1;
+          }
+          else 
+          {
+            return 1;
+          } 
+        } )
+    
+    switch (fileType)
+    {
+      case "PRG":
+        { 
+          this.CopyFiles = [];
+          this.AllFiles.forEach(file => {
+            if (file.fileOrPath == 'D')
+              {this.CopyFiles.push(file);}
+            else if(!file.fileName.includes(this.kan.projectName))
+              {this.CopyFiles.push(file);}
+          });
+          break;
+        }
+      case "SQL":
+          { 
+            this.SQLFiles = [];
+            this.AllFiles.forEach(file => {
+              if (file.fileOrPath == 'F' && file.fileName.includes(".sql"))
+                {this.SQLFiles.push(file);}
+
+            });
+            break;
+
+          }
 
 
+      default:
+          break;
+
+    }
+  }
 
 
   Initial() {

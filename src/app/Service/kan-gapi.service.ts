@@ -7,6 +7,7 @@ import { IRecentKan } from '../Interface/IRecentKan';
 import { IKan } from '../Interface/IKan';
 import { IDBVersion } from '../Interface/IDBVersion';
 import { IService } from '../Interface/IService';
+import { IFile } from '../Interface/IFile';
 import { headersToString } from 'selenium-webdriver/http';
 
 
@@ -19,6 +20,7 @@ export class KanGApiService {
   private KanUrl = 'http://localhost:16744/kans';
   private dbVerUrl = 'http://localhost:16744/DBVersion';
   private serviceUrl = 'http://localhost:16744/Services';
+  private filesUrl = 'http://localhost:16744/GetFile';
   
   constructor(private http: HttpClient) { }
 
@@ -97,17 +99,26 @@ export class KanGApiService {
 
   getDBVersions(): Observable<IDBVersion[]>{
     return this.http.get<IDBVersion[]>(this.dbVerUrl)
-    .pipe(  tap(data => console.log(`Updated kan is ${JSON.stringify(data)}`)),
+    .pipe(  tap(data => console.log(`Got DB Versions: ${JSON.stringify(data)}`)),
     catchError(this.handleError));
   }
 
   getServices(): Observable<IService[]>{
     return this.http.get<IService[]>(this.serviceUrl)
-    .pipe(  tap(data => console.log(`Updated kan is ${JSON.stringify(data)}`)),
+    .pipe(  tap(data => console.log(`Got Services: ${JSON.stringify(data)}`)),
     catchError(this.handleError));
   }
 
-
+  getFile(id: string): Observable<IFile[]>{
+   //getFile(id: string ): Promise<IFile[]>{
+      //let data = 
+      //return this.http.get<IFile[]>(this.filesUrl + "/" + id).toPromise();
+      return this.http.get<IFile[]>(this.filesUrl + "/" + id)
+      .pipe(  tap(data => console.log(`Got File list: ${JSON.stringify(data)}`)),
+    catchError(this.handleError));
+    
+    //return data;
+   }
 
   private handleError(err: HttpErrorResponse){
     let errorMessage = '';

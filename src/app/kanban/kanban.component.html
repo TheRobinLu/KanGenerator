@@ -25,8 +25,7 @@
                         <input type="checkbox" name="{{dbver.version}}" class="custom-control-input" 
                                 id="{{dbver.version}}" [checked]="dbver.compatible"
                                 (change) = "dbver.compatible = !dbver.compatible " 
-                                (change) = "dbVersionChecked() " 
-                                 >
+                                (change) = "dbVersionChecked() " >
                         <label class="custom-control-label  mx-3" for="{{dbver.version}}">{{dbver.version}} 
                             </label>
                     </div>
@@ -110,9 +109,6 @@
 
                 </div>
 
-
-
-
             </div>   
 
         </div>
@@ -124,7 +120,7 @@
                 <div class="row  my-2 d-flex justify-content-left text-left">
                     <div class="col-md-10">Script for running query</div>
                     <div class="col-md-2">
-                        <button class="fa fa-database  text-primary" (click)="getQuery()">
+                        <button class="fa fa-database  text-primary" (click)="showModal_sql=true" (click)="getFiles('SQL')" data-toggle="modal" data-target="#sqlFileModal">
 
                         </button>
                     </div>
@@ -136,7 +132,7 @@
                 <div class="row  my-2 d-flex justify-content-left text-left">
                     <div class="col-md-10">Script for copying files</div>
                     <div class="col-md-2"> 
-                        <button class="fa fa-file-text text-primary" (click)="getQuery()" >
+                        <button class="fa fa-file-text text-primary" (click)="showModal_copy=true" (click)="getFiles('PRG')" data-toggle="modal" data-target="#copyFileModal" >
 
                         </button> 
                     </div>
@@ -156,7 +152,82 @@
         <button class="btn btn-primary mx-1" (click)="Save()">Save</button>
         <button class="btn btn-primary mx-1" (click)="Clone()" >Clone</button>
         <button class="btn btn-primary mx-1" (click)="Generate()">Generate</button>
+
+ </div>
+
+    
+<!-- Modal -->
+<div class="modal fade " id="copyFileModal" [ngClass]="{'show':showModal_copy}" 
+        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog " role="document">
+
+        <div class="modal-content" >
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Copy Files</h5>
+            <button type="button" class="close" (click)="showModal_copy = false" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <tbody>
+                    <tr *ngFor='let afile of CopyFiles; let i = index' >
+                        <td class ="mp-2">
+                            <div class="custom-control custom-checkbox mx-4"> 
+                                <input type="checkbox" name="{{afile.fileName}}" id="{{afile.fileName}}" [checked]="afile.selected" (change) = "afile.selected = !afile.selected" >                   
+                            </div>
+                        </td>
+                        <td class ="px-2 text-left"> {{afile.fileName}} </td> 
+                        <td class ="px-2"> {{afile.fileOrPath}} </td>        
+                        <td><input placeholder="Destination" type="text" size="60"  name="{{afile.fileName}}{{i}}" id="{{afile.fileName}}{{i}}" [(ngModel)]="afile.destination"> </td> 
+                        <!-- <td> {{afile.selected}} </td>  -->
+                    </tr>
+                </tbody>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="showModal_copy = false" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary"> Script </button>
+            </div>
+        </div>
     </div>
+</div>    
+
+
+<!-- Modal -->
+<div class="modal fade modal-overlay" id="sqlFileModal" [ngClass]="{'show':showModal_sql}" 
+        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog " role="document">
+
+        <div class="modal-content" >
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">SQL Files</h5>
+            <button type="button" class="close" (click)="showModal_sql = false" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <tbody>
+                    <tr *ngFor='let afile of SQLFiles; let i = index' >
+                        <td class ="mp-2">
+                            <div class="custom-control custom-checkbox mx-4"> 
+                                <input type="checkbox" name="{{afile.fileName}}" id="{{afile.fileName}}" [checked]="afile.selected" (change) = "afile.selected = !afile.selected" >                   
+                            </div>
+                        </td>
+                        <td class ="px-2 text-left"> {{afile.fileName}} </td> 
+                        <td class ="px-2"> {{afile.fileOrPath}} </td>        
+                        <td><input placeholder="Destination" type="text" size="60"  name="{{afile.fileName}}{{i}}" id="{{afile.fileName}}{{i}}" [(ngModel)]="afile.destination"> </td> 
+                        <!-- <td> {{afile.selected}} </td>  -->
+                    </tr>
+                </tbody>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="showModal_sql = false" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary"> Script </button>
+            </div>
+        </div>
+    </div>
+</div>    
+
+
 
 
 </form>

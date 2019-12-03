@@ -12,15 +12,14 @@ import { KanbanComponent } from './kanban/kanban.component';
 import { JoblistComponent } from './joblist/joblist.component';
 import { DbversionComponent } from './dbversion/dbversion.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     WelcomeComponent,
     KanbanComponent,
     JoblistComponent,
-
     DbversionComponent,
-    
   ],
   imports: [
     BrowserModule,
