@@ -1,3 +1,7 @@
+import { IDBVersion } from "./IDBVersion";
+import { IFile } from "./IFile";
+import { IService } from "./IService";
+
 export interface IKan{
     projectId: number,
     projectName: string,
@@ -10,5 +14,10 @@ export interface IKan{
     cleanUp: string,
     modificationHistory: string,
     dBVersion: string,
-    status: string
+    status: string,
+    dbVersions: IDBVersion[],
+    copyFiles: IFile[],
+    sqlFiles: IFile[],
+    stopServiceList: IService[],
+    resumeServiceList:IService[]
 }

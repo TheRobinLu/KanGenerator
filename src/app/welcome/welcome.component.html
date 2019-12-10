@@ -1,7 +1,7 @@
-<div>
+<div style="margin-top: 80px;">
   <h2> Start...</h2>
   <ul class='nav nav-pills'>
-    <li><a class='nav-link' [routerLink]="['/Kan']"  >New Kanban Job</a></li>
+    <li><a class='nav-link' [routerLink]="['/Kan']">New Kanban Job</a></li>
   </ul>
 </div>
 
@@ -9,22 +9,21 @@
   <h2> Recent...</h2>
 
   <tbody>
-    <tr *ngFor='let kanJob of recentKans; let i=index' >
-      <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId ]">
-          {{kanJob.projectId}}</a> </td> 
-      <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId]">
+    <tr *ngFor='let kanJob of recentKans; let i=index'>
+      <td *ngIf="i < 5"> <a style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId ]">
+          {{kanJob.projectId}}</a> </td>
+      <td *ngIf="i < 5"> <a style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId]">
           {{kanJob.projectName}}</a> </td>
-      <td *ngIf="i < 5"> <a  style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId]">
+      <td *ngIf="i < 5"> <a style='margin: 0px' class='nav-link' [routerLink]="['/kanban', kanJob.projectId]">
           {{kanJob.description}}</a> </td>
     </tr>
 
     <br>
     <tr>
-      <td ><a class='nav-link' [routerLink]="['/joblist']"> More... </a></td>
+      <td><a class='nav-link' [routerLink]="['/joblist']"> More... </a></td>
     </tr>
 
   </tbody>
 
 
 </div>
-

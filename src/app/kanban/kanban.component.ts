@@ -27,8 +27,8 @@ export class KanbanComponent implements OnInit {
   StopServices: IService[];
   ResumeServices: IService[];
   AllFiles: IFile[];
-  CopyFiles: IFile[];
-  SQLFiles: IFile[];
+  //CopyFiles: IFile[];
+  //SQLFiles: IFile[];
   errorMessage: string;
   id: number = 0;
   test: string = "";
@@ -40,66 +40,76 @@ export class KanbanComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, 
     private kanApiService: KanGApiService
-    ) {
+    ) 
+  {
 
   }
 
 
-  ngOnInit() {
+  ngOnInit() 
+  {
     this.Initial();
     //this.PostInitial();
   }
 
-  Save(): boolean {
+  Save(): boolean 
+  {
     this.kanApiService.postKan(this.kan).subscribe();
     
     return true;
   }
 
-  Clone() { 
+  Clone() 
+  { 
     this.kan.projectId = null;
     this.kan.projectName = "";
     this.kan.status = "New";
   }
 
-  Generate() { 
+  Generate() 
+  { 
     this.kanApiService.putKan(this.kan.projectId, this.kan).subscribe(
         a => {this.jstring.join(a[1])}
       )
 
   }
 
-  dbVersionChecked(){
+  dbVersionChecked()
+  {
     this.kan.dBVersion = '';
+    this.kan.dbVersions = [];
     let temp: string = "";
     this.dbversions.forEach(
-      function(dbver)
+      dbver=>
       {
         if(dbver.compatible) 
         {
+          this.kan.dbVersions.push(dbver);
           if(temp === "")
           {
-            temp = "'" +  dbver.version + "'"
+            temp = "'" +  dbver.version + "'";
           }
           else{
-            temp = temp + ", " + "'" +  dbver.version + "'"
+            temp = temp + ", " + "'" +  dbver.version + "'";
           }
         }
       }
     );
     this.kan.dBVersion = temp;
-    
   }
 
 
-  stopServiceChecked(){
+  stopServiceChecked()
+  {
     this.kan.stopServices = "";
     let temp: string = "";
+    this.kan.stopServiceList = [];
     this.StopServices.forEach(
-      function(stopSr)
+      stopSr=>
       {
         if(stopSr.onOff)
         {
+          this.kan.stopServiceList.push(stopSr);
           if (stopSr.serviceName == 'IIS') 
           {temp = "IISReset\n";}
           else
@@ -108,22 +118,21 @@ export class KanbanComponent implements OnInit {
           }
         }
       }
-
     )
-
     this.kan.stopServices = temp;
-
   }
 
-  resumeServiceChecked(){
-
+  resumeServiceChecked()
+  {
     this.kan.resumeServices = "";
     let temp: string = "";
+    this.kan.resumeServiceList = [];
     this.ResumeServices.forEach(
-      function(resumeSr)
+      resumeSr=>
       {
         if(resumeSr.onOff)
         {
+          this.kan.resumeServiceList.push(resumeSr);
           if (resumeSr.serviceName == 'IIS') 
           {temp = "IISReset\n";}
           else
@@ -132,25 +141,17 @@ export class KanbanComponent implements OnInit {
           }
         }
       }
-
-
     )
-
     this.kan.resumeServices = temp;
-
   }
 
-  getFiles(fileType: string ){
+  getFiles(fileType: string )
+  {
     //fileType: SQL, PRG, BAT, ALL
-
     this.kanApiService.getFile(this.kan.projectName).subscribe(
         a => { this.AllFiles = a ;
             this.postgetFile(fileType)
           });
-    // this.kanApiService.getFile(this.kan.projectName).
-    //   then(files => files.fill ) ;
-   
-     
   }
 
   postgetFile(fileType: string)
@@ -170,34 +171,57 @@ export class KanbanComponent implements OnInit {
     {
       case "PRG":
         { 
-          this.CopyFiles = [];
-          this.AllFiles.forEach(file => {
+          this.kan.copyFiles = [];
+          sortfiles.forEach(file => {
             if (file.fileOrPath == 'D')
-              {this.CopyFiles.push(file);}
+              {this.kan.copyFiles.push(file);}
             else if(!file.fileName.includes(this.kan.projectName))
-              {this.CopyFiles.push(file);}
+              {this.kan.copyFiles.push(file);}
           });
           break;
         }
       case "SQL":
           { 
-            this.SQLFiles = [];
-            this.AllFiles.forEach(file => {
+            this.kan.sqlFiles = [];
+            sortfiles.forEach(file => {
               if (file.fileOrPath == 'F' && file.fileName.includes(".sql"))
-                {this.SQLFiles.push(file);}
+                {this.kan.sqlFiles.push(file);}
 
             });
             break;
-
           }
-
-
       default:
           break;
-
     }
+    console.log("Copy File List:" + JSON.stringify(this.kan.copyFiles))
+
   }
 
+
+  copyFileScript()
+  {
+    this.kan.copyFile = "";
+    this.kan.copyFiles.forEach(
+      file => {
+        this.kan.copyFile = file.selected? this.kan.copyFile + 'Xcopy c:\\PropharmTemp\\' + file.fileName + ' "' 
+        + file.destination + '" /y \n': this.kan.copyFile ;
+      }
+    )
+
+    console.log("Copy File Script:" + JSON.stringify(this.kan.copyFile))
+  }
+
+  exeQueryScript()
+  {
+    this.kan.runQuery = "";
+    this.kan.sqlFiles.forEach(
+      file => { 
+        this.kan.runQuery = file.selected?  this.kan.runQuery + 'dbisql -c "DSN=%NEXXSYS_DSN%;uid=dba;pwd=sql" -codepage 1252 read c:\\ProPharmTemp\\'
+        +  file.fileName + ' \n': this.kan.runQuery; 
+        console.log(this.kan.runQuery);
+      }
+    )
+  }
 
   Initial() {
     this.id = +(this.route.snapshot.paramMap.get('id'));
@@ -213,16 +237,11 @@ export class KanbanComponent implements OnInit {
       b => {this.ResumeServices = b },
     );
 
-
     if( this.id > 0)
     {
       this.kanApiService.getKan(this.id).subscribe(
         a => {this.kan = a },
       );
     } 
-
   }
-
-
-
 }

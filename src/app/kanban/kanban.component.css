@@ -7,14 +7,21 @@ text-align: center;
     display: block;
 }
 
+.fade.in{
+    opacity: 0.5;
 
-.modal-dialog{
-    max-width: 900px !important;
-    -moz-box-shadow: 8px 8px 8px #535353;
-    -webkit-box-shadow: 8px 8px 8px #535353;       
-    box-shadow: 8px 8px 20px #535353;
-    vertical-align: middle;
 }
+ .modal-content
+{
+     box-shadow: 8px 8px 20px #535353; 
+}  
+
+
+
+ .modal-dialog{
+    max-width: 900px !important;
+
+} 
 
 .modal-header {
     background-color: rgb(110, 127, 143);

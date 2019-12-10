@@ -1,17 +1,15 @@
-<br><br><br>
-
-<form>
-
+<form  style="margin-top: 80px; margin-bottom: 80px;">
 
     <div class="container">
         <div class="row my-2 d-flex justify-content-left text-left">
             <div class="col-md-2">Kan ID</div>
-            <input class="col-md-2" placeholder="###" type="int" name="projectID" required [(ngModel)]="kan.projectId" />
+            <input class="col-md-2" placeholder="###" type="int" name="projectID" required
+                [(ngModel)]="kan.projectId" />
             <div class="col-md-2"></div>
             <div class="col-md-2">Kan Name</div>
             <input class="col-md-4  px-3" placeholder="KAN######" type="text" name="projectName"
                 [(ngModel)]="kan.projectName" />
-  
+
         </div>
 
         <div class="row  my-2 d-flex justify-content-left text-left">
@@ -19,18 +17,17 @@
             <input class="col-md-10  px-3" placeholder="Database Version" type="text" name="dBVersion"
                 [(ngModel)]="kan.dBVersion" />
 
-            <ul class="list-inline" *ngFor="let dbver of dbversions; let i = index" >
+            <ul class="list-inline" *ngFor="let dbver of dbversions; let i = index">
                 <li class="list-inline-item">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" name="{{dbver.version}}" class="custom-control-input" 
-                                id="{{dbver.version}}" [checked]="dbver.compatible"
-                                (change) = "dbver.compatible = !dbver.compatible " 
-                                (change) = "dbVersionChecked() " >
-                        <label class="custom-control-label  mx-3" for="{{dbver.version}}">{{dbver.version}} 
-                            </label>
+                        <input type="checkbox" name="{{dbver.version}}" class="custom-control-input"
+                            id="{{dbver.version}}" [checked]="dbver.compatible"
+                            (change)="dbver.compatible = !dbver.compatible " (change)="dbVersionChecked() ">
+                        <label class="custom-control-label  mx-3" for="{{dbver.version}}">{{dbver.version}}
+                        </label>
                     </div>
                 </li>
-            </ul>    
+            </ul>
         </div>
         <!-- {{dbversions|json}} -->
 
@@ -39,12 +36,9 @@
             <div class="col-md-6 px-3">
                 <div class="row  my-2 d-flex justify-content-left text-left">
                     <div class="col-md-3">Description</div>
-                    <textarea class="form-control" rows="3" 
-                        placeholder="Description" type="text" name="description"
-                        [(ngModel)]="kan.description" >
+                    <textarea class="form-control" rows="3" placeholder="Description" type="text" name="description"
+                        [(ngModel)]="kan.description">
                     </textarea>
-
-
                 </div>
             </div>
             <!-- <div class="col-md-1"></div> -->
@@ -65,52 +59,44 @@
                 <div class="row  my-2 d-flex justify-content-left text-left">
                     <div class="col-md-12">Script for stoping Services</div>
                     <textarea class="form-control col-md-12" rows="3" type="text" name="stopServices"
-                    [(ngModel)]="kan.stopServices"></textarea>
+                        [(ngModel)]="kan.stopServices"></textarea>
                 </div>
                 <div class="row  my-2 d-flex justify-content-left text-left">
-                    <ul class="list-inline" *ngFor="let stopSv of StopServices; let i = index" >
+                    <ul class="list-inline" *ngFor="let stopSv of StopServices; let i = index">
                         <li class="list-inline-item">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="{{stopSv.serviceName}}" class="custom-control-input" 
-                                        id="{{stopSv.serviceName}}" [checked]="stopSv.onOff"
-                                        (change) = "stopSv.onOff = !stopSv.onOff " 
-                                        (change) = "stopServiceChecked() " 
-                                            >
-                                <label class="custom-control-label  mx-3" for="{{stopSv.serviceName}}">{{stopSv.serviceName}} 
-                                    </label>
+                                <input type="checkbox" name="{{stopSv.serviceName}}" class="custom-control-input"
+                                    id="{{stopSv.serviceName}}" [checked]="stopSv.onOff"
+                                    (change)="stopSv.onOff = !stopSv.onOff " (change)="stopServiceChecked() ">
+                                <label class="custom-control-label  mx-3"
+                                    for="{{stopSv.serviceName}}">{{stopSv.serviceName}}
+                                </label>
                             </div>
                         </li>
-                    </ul> 
+                    </ul>
                 </div>
-
-
-
             </div>
             <div class="col-md-6 px-3">
                 <div class="row  my-2 d-flex justify-content-left text-left">
                     <div class="col-md-12">Script for resuming services</div>
                     <textarea class="form-control col-md-12" rows="3" type="text" name="resumeService"
-                    [(ngModel)]="kan.resumeServices"></textarea>
+                        [(ngModel)]="kan.resumeServices"></textarea>
                 </div>
                 <div class="row  my-2 ">
-                    <ul class="list-inline" *ngFor="let resumeSv of ResumeServices; let i = index" >
+                    <ul class="list-inline" *ngFor="let resumeSv of ResumeServices; let i = index">
                         <li class="list-inline-item">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="{{resumeSv.serviceName}}" class="custom-control-input" 
-                                        id="{{resumeSv.serviceName}}-" [checked]="resumeSv.onOff"
-                                        (change) = "resumeSv.onOff = !resumeSv.onOff " 
-                                        (change) = "resumeServiceChecked() " 
-                                            >
-                                <label class="custom-control-label  mx-3" for="{{resumeSv.serviceName}}-">{{resumeSv.serviceName}} 
-                                    </label>
+                                <input type="checkbox" name="{{resumeSv.serviceName}}" class="custom-control-input"
+                                    id="{{resumeSv.serviceName}}-" [checked]="resumeSv.onOff"
+                                    (change)="resumeSv.onOff = !resumeSv.onOff " (change)="resumeServiceChecked() ">
+                                <label class="custom-control-label  mx-3"
+                                    for="{{resumeSv.serviceName}}-">{{resumeSv.serviceName}}
+                                </label>
                             </div>
                         </li>
-                    </ul> 
-
+                    </ul>
                 </div>
-
-            </div>   
-
+            </div>
         </div>
 
 
@@ -120,23 +106,26 @@
                 <div class="row  my-2 d-flex justify-content-left text-left">
                     <div class="col-md-10">Script for running query</div>
                     <div class="col-md-2">
-                        <button class="fa fa-database  text-primary" (click)="showModal_sql=true" (click)="getFiles('SQL')" data-toggle="modal" data-target="#sqlFileModal">
+                        <button class="fa fa-database  text-primary" (click)="showModal_sql=true"
+                            (click)="getFiles('SQL')" data-toggle="modal" data-target="#sqlFileModal">
 
                         </button>
                     </div>
-                    <textarea class="form-control col-md-12" rows="3" type="text" name="runQuery" 
+                    <textarea class="form-control col-md-12" rows="3" type="text" name="runQuery"
                         [(ngModel)]="kan.runQuery"></textarea>
                 </div>
             </div>
             <div class="col-md-6 px-3">
                 <div class="row  my-2 d-flex justify-content-left text-left">
                     <div class="col-md-10">Script for copying files</div>
-                    <div class="col-md-2"> 
-                        <button class="fa fa-file-text text-primary" (click)="showModal_copy=true" (click)="getFiles('PRG')" data-toggle="modal" data-target="#copyFileModal" >
+                    <div class="col-md-2">
+                        <button class="fa fa-file-text text-primary" (click)="showModal_copy=true"
+                            (click)="getFiles('PRG')" data-toggle="modal" data-target="#copyFileModal">
 
-                        </button> 
+                        </button>
                     </div>
-                    <textarea class="form-control  col-md-12" rows="3" type="text" name="copyFile" [(ngModel)]="kan.copyFile"></textarea>
+                    <textarea class="form-control  col-md-12" rows="3" type="text" name="copyFile"
+                        [(ngModel)]="kan.copyFile"></textarea>
                 </div>
             </div>
         </div>
@@ -147,87 +136,91 @@
         </div>
     </div>
 
- 
-    <div class="fixed-bottom mb-5 pb-3" >
+
+    <div class="fixed-bottom mb-5 pb-3">
         <button class="btn btn-primary mx-1" (click)="Save()">Save</button>
-        <button class="btn btn-primary mx-1" (click)="Clone()" >Clone</button>
+        <button class="btn btn-primary mx-1" (click)="Clone()">Clone</button>
         <button class="btn btn-primary mx-1" (click)="Generate()">Generate</button>
 
- </div>
+    </div>
 
-    
-<!-- Modal -->
-<div class="modal fade " id="copyFileModal" [ngClass]="{'show':showModal_copy}" 
-        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-    <div class="modal-dialog " role="document">
 
-        <div class="modal-content" >
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Copy Files</h5>
-            <button type="button" class="close" (click)="showModal_copy = false" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="modal-body">
-                <tbody>
-                    <tr *ngFor='let afile of CopyFiles; let i = index' >
-                        <td class ="mp-2">
-                            <div class="custom-control custom-checkbox mx-4"> 
-                                <input type="checkbox" name="{{afile.fileName}}" id="{{afile.fileName}}" [checked]="afile.selected" (change) = "afile.selected = !afile.selected" >                   
-                            </div>
-                        </td>
-                        <td class ="px-2 text-left"> {{afile.fileName}} </td> 
-                        <td class ="px-2"> {{afile.fileOrPath}} </td>        
-                        <td><input placeholder="Destination" type="text" size="60"  name="{{afile.fileName}}{{i}}" id="{{afile.fileName}}{{i}}" [(ngModel)]="afile.destination"> </td> 
-                        <!-- <td> {{afile.selected}} </td>  -->
-                    </tr>
-                </tbody>
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="showModal_copy = false" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary"> Script </button>
+    <!-- Modal -->
+    <div class="modal fade" id="copyFileModal" [ngClass]="{'show':showModal_copy}" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Copy Files</h5>
+                    <button type="button" class="close" (click)="showModal_copy = false" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <tbody>
+                        <tr *ngFor='let afile of kan.copyFiles; let i = index'>
+                            <td class="mp-2">
+                                <div class="custom-control custom-checkbox mx-4">
+                                    <input type="checkbox" name="{{afile.fileName}}" id="{{afile.fileName}}"
+                                        [checked]="afile.selected" (change)="afile.selected = !afile.selected">
+                                </div>
+                            </td>
+                            <td class="px-2 text-left"> {{afile.fileName}} </td>
+                            <td class="px-2"> {{afile.fileOrPath}} </td>
+                            <td><input placeholder="Destination" type="text" size="60" name="{{afile.fileName}}{{i}}"
+                                    id="{{afile.fileName}}{{i}}" [(ngModel)]="afile.destination"> </td>
+                            <!-- <td> {{afile.selected}} </td>  -->
+                        </tr>
+                    </tbody>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="showModal_copy = false"
+                        data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary"  (click)="copyFileScript()" (click)="showModal_copy = false"> Script </button>
+                </div>
             </div>
         </div>
     </div>
-</div>    
 
 
-<!-- Modal -->
-<div class="modal fade modal-overlay" id="sqlFileModal" [ngClass]="{'show':showModal_sql}" 
-        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-    <div class="modal-dialog " role="document">
+    <!-- Modal -->
+    <div class="modal fade" id="sqlFileModal" [ngClass]="{'show':showModal_sql}" tabindex="-1"
+        role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
 
-        <div class="modal-content" >
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">SQL Files</h5>
-            <button type="button" class="close" (click)="showModal_sql = false" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="modal-body">
-                <tbody>
-                    <tr *ngFor='let afile of SQLFiles; let i = index' >
-                        <td class ="mp-2">
-                            <div class="custom-control custom-checkbox mx-4"> 
-                                <input type="checkbox" name="{{afile.fileName}}" id="{{afile.fileName}}" [checked]="afile.selected" (change) = "afile.selected = !afile.selected" >                   
-                            </div>
-                        </td>
-                        <td class ="px-2 text-left"> {{afile.fileName}} </td> 
-                        <td class ="px-2"> {{afile.fileOrPath}} </td>        
-                        <td><input placeholder="Destination" type="text" size="60"  name="{{afile.fileName}}{{i}}" id="{{afile.fileName}}{{i}}" [(ngModel)]="afile.destination"> </td> 
-                        <!-- <td> {{afile.selected}} </td>  -->
-                    </tr>
-                </tbody>
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-primary" (click)="showModal_sql = false" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary"> Script </button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">SQL Files</h5>
+                    <button type="button" class="close" (click)="showModal_sql = false" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <tbody>
+                        <tr *ngFor='let afile of kan.sqlFiles; let i = index'>
+                            <td class="mp-2">
+                                <div class="custom-control custom-checkbox mx-4">
+                                    <input type="checkbox" name="{{afile.fileName}}" id="{{afile.fileName}}"
+                                        [checked]="afile.selected" (change)="afile.selected = !afile.selected">
+                                </div>
+                            </td>
+                            <td class="px-2 text-left"> {{afile.fileName}} </td>
+                            <td class="px-2"> {{afile.fileOrPath}} </td>
+                            <td><input placeholder="Destination" type="text" size="60" name="{{afile.fileName}}{{i}}"
+                                    id="{{afile.fileName}}{{i}}" [(ngModel)]="afile.destination"> </td>
+                            <!-- <td> {{afile.selected}} </td>  -->
+                        </tr>
+                    </tbody>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="showModal_sql = false"
+                        data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary"  (click)="exeQueryScript()" (click)="showModal_sql = false"> Script </button>
+                </div>
             </div>
         </div>
     </div>
-</div>    
-
-
-
-
 </form>
