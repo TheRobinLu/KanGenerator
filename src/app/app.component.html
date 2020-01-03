@@ -1,5 +1,5 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div  [ngStyle]="{background: 'url(assets/Metal.jpg)'}">
+<div  [ngStyle]="{background: 'url(assets/Metal_bright.jpg)'}">
 <!-- <div class="container"  > -->
 
 <!--div class="container" style = "font-family:'Trebuchet MS'; background:'url(src/assets/Metal.jpg)'"-->
@@ -9,18 +9,19 @@
       <a class='navbar-brand text-light' >{{title}}</a><br><br>
 
         <ul class='nav nav-pills'style="color: LightBlue;" > 
-          <li><a class='nav-link' style="color: LightBlue;"  [routerLink]="['/welcome']">Home</a></li>
+          <li> <a class='nav-link' style="color: LightBlue;"  [routerLink]="['/welcome']">Home</a></li>
           <li> <a class='nav-link' style="color: LightBlue;"  [routerLink]="['/joblist']" >Job List</a>   </li>
-          <li> <a class='nav-link' style="color: LightBlue;"  [routerLink]="['/kanban']" >KanBan</a>   </li>
+          <!-- <li> <a class='nav-link' style="color: LightBlue;"  [routerLink]="['/kanban', 0]" >KanBan</a>   </li> -->
+          <li> <a class='nav-link' style="color: LightBlue;"  [routerLink]="['/setting']" >Settings</a>   </li>
       </ul>
-    
+     
     </nav>
   </header> 
 
 
 <!-- </div> -->
 
-  <div class="container-fluid" >
+  <div class="container-fluid" style="padding-top: 80px; padding-bottom: 800px" >
     <router-outlet></router-outlet>  
   </div>
   

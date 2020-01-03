@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.min.css';
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
 
 html {
     position: relative;
@@ -20,4 +21,31 @@ footer {
     color:lightgrey;
     height: 60px;
     line-height: 10px;
+  }
+
+.btn{
+    --box-shadow: 8px 8px 8px rgba(205, 218, 248, 0.75); 
+    border-color: #d4d7ff !important;
+    box-shadow: 0 0 10px rgba(7, 23, 58, 0.75) !important;
+    border-radius: 0.4rem;
+ }
+
+ 
+
+.btn-sm
+{
+    width: 38px;
+}
+
+.fa-lg
+{
+  /* background-color: cadetblue; */
+  width: 32px;
+  height: 32px;
+  border-radius: 0.4rem;
+}
+
+
+.form-rounded {
+  border-radius: 0.7rem;
   }

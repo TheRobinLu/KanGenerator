@@ -9,6 +9,7 @@ import { IDBVersion } from '../Interface/IDBVersion';
 import { IService } from '../Interface/IService';
 import { IFile } from '../Interface/IFile';
 import { headersToString } from 'selenium-webdriver/http';
+import { ISetting } from '../Interface/ISetting';
 
 
 @Injectable({
@@ -17,10 +18,12 @@ import { headersToString } from 'selenium-webdriver/http';
 export class KanGApiService {
 
   //private KanUrl = 'http://localhost:7361/kan';
+  private baseUrl = 'http://localhost:16744';
   private KanUrl = 'http://localhost:16744/kans';
   private dbVerUrl = 'http://localhost:16744/DBVersion';
   private serviceUrl = 'http://localhost:16744/Services';
   private filesUrl = 'http://localhost:16744/GetFile';
+  private generatorsUrl = 'http://localhost:16744/Gen';
   
   constructor(private http: HttpClient) { }
 
@@ -95,6 +98,14 @@ export class KanGApiService {
       );
   }
 
+  genKan(kan:IKan): Observable<string>{
+    return this.http.post<string>(this.generatorsUrl, kan)
+      .pipe(
+        tap(data => console.log(`Generated kan is ${JSON.stringify(data)}`)),
+        catchError(this.handleError)
+      );
+
+  }
 
 
   getDBVersions(): Observable<IDBVersion[]>{
@@ -119,6 +130,32 @@ export class KanGApiService {
     
     //return data;
    }
+
+  getSetting(): Observable<ISetting>{
+    return this.http.get<ISetting>(this.baseUrl + "/Setting")
+    .pipe(  tap(data => console.log(`Got Setting: ${JSON.stringify(data)}`)),
+    catchError(this.handleError));
+  }
+
+
+  postSetting(updatedSetting: ISetting ): Observable<string> {
+    let headers = new HttpHeaders({
+        'Content-type': 'text/json'
+
+    });
+
+    headers.set("responseType", 'text');
+    let options ={headers};
+
+    let body =JSON.stringify(updatedSetting);
+
+    return this.http.post<string>(this.baseUrl + '/Setting',body ,options)
+      .pipe(
+        tap(data => console.log(`Updated Setting: ${JSON.stringify(data)}`)),
+        catchError(this.handleError)
+      );
+  }
+ 
 
   private handleError(err: HttpErrorResponse){
     let errorMessage = '';

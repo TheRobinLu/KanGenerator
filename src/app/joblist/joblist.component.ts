@@ -12,6 +12,8 @@ import {IRecentKan} from '../Interface/IRecentKan';
 export class JoblistComponent implements OnInit {
 
   recentKans: IRecentKan[];
+  filter: string;
+  allKans: IRecentKan[];
   errorMessage: string;
 
   constructor(private kanGApiService: KanGApiService){
@@ -26,10 +28,22 @@ export class JoblistComponent implements OnInit {
 
       a => {this.recentKans = a.sort( function( a, b) {
 
-        return new Date(b.lastOpen ).getTime() - new Date(a.lastOpen).getTime()})},
+        return new Date(b.lastOpen ).getTime() - new Date(a.lastOpen).getTime()}
+        
+        );
+
+        this.allKans = JSON.parse(JSON.stringify(this.recentKans));
+        
+      },
         error => this.errorMessage = error as any
 
     );
+  }
+
+  filtering()
+  {
+    this.recentKans = JSON.parse(JSON.stringify(this.allKans));
+    this.recentKans = this.allKans.filter(k => (k.projectName.search(this.filter) != -1 || k.description.search(this.filter) != -1));
   }
 
 }

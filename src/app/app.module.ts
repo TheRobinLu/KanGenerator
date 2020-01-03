@@ -11,6 +11,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { KanbanComponent } from './kanban/kanban.component';
 import { JoblistComponent } from './joblist/joblist.component';
 import { DbversionComponent } from './dbversion/dbversion.component';
+import { SettingComponent } from './setting/setting.component';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { DbversionComponent } from './dbversion/dbversion.component';
     KanbanComponent,
     JoblistComponent,
     DbversionComponent,
+    SettingComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,6 +33,7 @@ import { DbversionComponent } from './dbversion/dbversion.component';
       {path:'welcome', component: WelcomeComponent},
       {path:'joblist', component: JoblistComponent},
       {path:'kanban/:id', component: KanbanComponent},
+      {path:'setting', component: SettingComponent},
       {path: '**', redirectTo: 'welcome', pathMatch: 'full' }])
   ],
   providers: [],

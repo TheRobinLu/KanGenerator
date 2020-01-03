@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 
 
-import { RecentKansService} from '../Service/recent-kans.service';
 import { KanGApiService} from '../Service/kan-gapi.service';
 import {IRecentKan} from '../Interface/IRecentKan';
 
@@ -18,6 +17,7 @@ import {map, filter} from 'rxjs/operators';
 export class WelcomeComponent implements OnInit {
 
   recentKans: IRecentKan[];
+  maxRecent: number;
   //LastRecents: IRecentKan[];
   errorMessage: string;
 
@@ -28,8 +28,6 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit() {
     this.kanGApiService.getRecentKans().subscribe(
-      // tslint:disable-next-line: no-shadowed-variable
-      // tslint:disable-next-line: only-arrow-functions
 
       a => {this.recentKans = a.sort( function( a, b) {
 
@@ -37,6 +35,14 @@ export class WelcomeComponent implements OnInit {
         error => this.errorMessage = error as any
 
     );
+
+    this.kanGApiService.getSetting().subscribe(
+      a => {this.maxRecent = a.maxRecent ,
+       error => this.errorMessage = error as any;
+       
+       console.log("Retrieve Setting for Max Recent: " + JSON.stringify(this.maxRecent));
+     }
+   );
   }
 
 }

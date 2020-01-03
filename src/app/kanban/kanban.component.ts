@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { FormBuilder, FormGroup, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 // import { MatDialogModule} from "@angular/material/badge"; 
-
+//import { cloneDeep } from 'lodash';
 
 
 import { IKan } from '../Interface/IKan';
@@ -13,6 +13,7 @@ import { Alert } from 'selenium-webdriver';
 import { IDBVersion } from '../Interface/IDBVersion';
 import { IService } from '../Interface/IService';
 import { IFile } from '../Interface/IFile';
+import { ThrowStmt } from '@angular/compiler';
   
 @Component({
   selector: 'app-kanban',
@@ -21,7 +22,7 @@ import { IFile } from '../Interface/IFile';
   providers: [KanGApiService]
 })
 export class KanbanComponent implements OnInit {
-  kan: IKan;
+  kan: IKan ;
   kans: IKan[];
   dbversions: IDBVersion[];
   StopServices: IService[];
@@ -32,9 +33,9 @@ export class KanbanComponent implements OnInit {
   errorMessage: string;
   id: number = 0;
   test: string = "";
-  jstring: string[] = ["dff","weuih"];
+  jstring: string[] ;
 
-  dbverForm: FormGroup;
+  //dbverForm: FormGroup;
  
 
 
@@ -48,8 +49,18 @@ export class KanbanComponent implements OnInit {
 
   ngOnInit() 
   {
+
+
+
     this.Initial();
     //this.PostInitial();
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+   // Alert("This is Destroy");
+    
   }
 
   Save(): boolean 
@@ -68,8 +79,10 @@ export class KanbanComponent implements OnInit {
 
   Generate() 
   { 
-    this.kanApiService.putKan(this.kan.projectId, this.kan).subscribe(
-        a => {this.jstring.join(a[1])}
+    this.kanApiService.genKan( this.kan).subscribe(
+        a => {this.test = (a);
+        console.log('a: ' + JSON.stringify(a));
+        }
       )
 
   }
@@ -111,10 +124,10 @@ export class KanbanComponent implements OnInit {
         {
           this.kan.stopServiceList.push(stopSr);
           if (stopSr.serviceName == 'IIS') 
-          {temp = "IISReset\n";}
+          {temp = "IISReset\r\n";}
           else
           {
-            temp = temp + "taskkill /F /IM " + stopSr.serviceExe + "\n";
+            temp = temp + "taskkill /F /IM " + stopSr.serviceExe + "\r\n";
           }
         }
       }
@@ -134,10 +147,10 @@ export class KanbanComponent implements OnInit {
         {
           this.kan.resumeServiceList.push(resumeSr);
           if (resumeSr.serviceName == 'IIS') 
-          {temp = "IISReset\n";}
+          {temp = "IISReset\r\n";}
           else
           {
-            temp = temp + resumeSr.path + resumeSr.serviceExe + "\n";
+            temp = temp + resumeSr.path + resumeSr.serviceExe + "\r\n";
           }
         }
       }
@@ -171,29 +184,65 @@ export class KanbanComponent implements OnInit {
     {
       case "PRG":
         { 
-          this.kan.copyFiles = [];
+          //this.kan.copyFiles = [];
           sortfiles.forEach(file => {
             if (file.fileOrPath == 'D')
-              {this.kan.copyFiles.push(file);}
+              {
+                let existFile: IFile = this.kan.copyFiles.find(inFile => inFile.fileName == file.fileName);
+                
+                if (existFile == undefined )
+                {
+                  this.kan.copyFiles.push(file);
+                }
+                else
+                {
+                  existFile = file;
+                }
+              }
             else if(!file.fileName.includes(this.kan.projectName))
-              {this.kan.copyFiles.push(file);}
+              {
+                let existFile: IFile = this.kan.copyFiles.find(inFile => inFile.fileName == file.fileName);
+                
+                if (existFile == undefined )
+                {
+                  this.kan.copyFiles.push(file);
+                }
+                else
+                {
+                  existFile = file;
+                }                
+              }
           });
+
+          this.kan.copyFiles.filter(s => s.selected);
+          console.log('filtered copyfile list: ' + JSON.stringify(this.kan.copyFiles));
+
           break;
         }
       case "SQL":
           { 
-            this.kan.sqlFiles = [];
+            //this.kan.sqlFiles = [];
             sortfiles.forEach(file => {
-              if (file.fileOrPath == 'F' && file.fileName.includes(".sql"))
-                {this.kan.sqlFiles.push(file);}
-
+              if (file.fileOrPath == 'F' && file.fileName.includes(".sql") )
+              {
+                let existFile: IFile = this.kan.sqlFiles.find(inFile => inFile.fileName == file.fileName);
+                if (existFile == undefined )
+                {
+                  this.kan.sqlFiles.push(file);
+                }
+                else
+                {
+                  existFile = file;
+                }
+              }
             });
+            //this.kan.sqlFiles.filter(s => s.selected);
             break;
           }
       default:
           break;
     }
-    console.log("Copy File List:" + JSON.stringify(this.kan.copyFiles))
+
 
   }
 
@@ -204,44 +253,189 @@ export class KanbanComponent implements OnInit {
     this.kan.copyFiles.forEach(
       file => {
         this.kan.copyFile = file.selected? this.kan.copyFile + 'Xcopy c:\\PropharmTemp\\' + file.fileName + ' "' 
-        + file.destination + '" /y \n': this.kan.copyFile ;
+        + file.destination + '" /y \r\n': this.kan.copyFile;
       }
     )
+    this.kan.copyFiles = this.kan.copyFiles.filter(s => s.selected);
+    console.log("FIlter File List:" + JSON.stringify(this.kan.copyFiles ))
 
-    console.log("Copy File Script:" + JSON.stringify(this.kan.copyFile))
   }
 
   exeQueryScript()
   {
     this.kan.runQuery = "";
+    this.kan.sqlFiles = this.kan.sqlFiles.filter(s => s.selected);
+    console.log("FIlter File List:" + JSON.stringify(this.kan.sqlFiles ))
     this.kan.sqlFiles.forEach(
       file => { 
         this.kan.runQuery = file.selected?  this.kan.runQuery + 'dbisql -c "DSN=%NEXXSYS_DSN%;uid=dba;pwd=sql" -codepage 1252 read c:\\ProPharmTemp\\'
-        +  file.fileName + ' \n': this.kan.runQuery; 
+        +  file.fileName + ' \r\n': this.kan.runQuery; 
         console.log(this.kan.runQuery);
       }
     )
   }
 
+  projectIdChange()
+  {
+    let a = '000000' + this.kan.projectId.toString();
+    this.kan.projectName = 'KAN' + a.substr(a.length -6 );
+  }
+
+
+  cleanUpScript()
+  {
+
+    this.kan.cleanUp = "";
+    this.kan.copyFiles.forEach(
+      copy => {
+        if (copy.fileOrPath == 'D')
+        {
+          this.kan.cleanUp += "rmdir /q /s " + copy.fileName + "\r\n"; 
+
+        }
+        else
+        {
+          this.kan.cleanUp += "delete /f C:\\PropharmTemp\\" + copy.fileName + "\r\n"; 
+
+        }
+      }
+    );
+
+
+    this.kan.sqlFiles.forEach(
+      sql => {
+          this.kan.cleanUp += "delete /f C:\\PropharmTemp\\" + sql.fileName + "\r\n"; 
+        }
+    );
+
+
+    this.kan.cleanUp += "delete /f C:\\PropharmTemp\\" + this.kan.projectName + ".bat\r\n";
+    this.kan.cleanUp += "delete /f C:\\PropharmTemp\\" + this.kan.projectName + ".sql\r\n";
+    //this.kan.cleanUp += "delete /f C:\\PropharmTemp\\" + this.kan.projectName + "_S.bat";
+
+  }
+
+  generateValidation()
+  {
+    if( this.kan.copyFile  )
+    {}
+
+
+
+
+  }
+
   Initial() {
     this.id = +(this.route.snapshot.paramMap.get('id'));
-    this.kanApiService.getDBVersions().subscribe(
-      a => {this.dbversions = a },
-    );
-
-    this.kanApiService.getServices().subscribe(
-      a => {this.StopServices = a },
-    );
-
-    this.kanApiService.getServices().subscribe(
-      b => {this.ResumeServices = b },
-    );
 
     if( this.id > 0)
     {
-      this.kanApiService.getKan(this.id).subscribe(
-        a => {this.kan = a },
+      this.kanApiService.getKan(this.id).subscribe
+      (
+        a => 
+        {
+          this.kan = a;
+          this.kanApiService.getSetting().subscribe
+          (
+            b => 
+            {
+              this.dbversions =  JSON.parse(JSON.stringify(b.dbVersions));
+
+              this.kan.dbVersions.forEach
+              (
+                kandbVer => 
+                {
+                  this.dbversions.forEach
+                  (
+                    dbVer => 
+                    {
+                      dbVer.compatible = (dbVer.version == kandbVer.version)? 
+                          kandbVer.compatible: dbVer.compatible;
+                    }
+                  ) 
+                }
+              ); 
+              
+              this.StopServices = JSON.parse(JSON.stringify(b.services));
+              this.kan.stopServiceList.forEach
+              (
+                kanStopService =>
+                {
+                  this.StopServices.forEach
+                  (
+                    stopService =>
+                    {
+                      stopService.onOff = (stopService.serviceName == kanStopService.serviceName)?
+                          kanStopService.onOff: stopService.onOff;
+                    }
+                  )
+                }
+              )
+              this.ResumeServices = JSON.parse(JSON.stringify(b.services));
+              this.kan.resumeServiceList.forEach
+              (
+                kanResumeService =>
+                {
+                  this.ResumeServices.forEach
+                  (
+                    ResumeService =>
+                    {
+                      ResumeService.onOff = (ResumeService.serviceName == kanResumeService.serviceName)?
+                      kanResumeService.onOff: ResumeService.onOff;
+                    }
+                  )
+                }
+              )            
+
+            }
+          );
+
+        }
       );
+    
+    }
+    else
+    {
+      if (this.kan)
+      {return;}
+      else{
+        this.kan = 
+        {
+          projectId: 0,
+          projectName: "",
+          dBVersion:"",
+          description:"",
+          modificationHistory:"",
+          dbVersions: null,
+          stopServices:"",
+          stopServiceList:null,
+          status:"New",
+          resumeServices:"",
+          resumeServiceList:null,
+          copyFile:"",
+          copyFiles:null,
+          runQuery:"",
+          sqlFiles:null,
+          cleanUp:"",
+          lastOpen: new Date(Date()),
+  
+        }
+
+        this.kanApiService.getDBVersions().subscribe
+        (
+          b => 
+          {
+            this.dbversions = b;});
+
+        this.kanApiService.getServices().subscribe
+        (
+          c => 
+          {
+            this.StopServices = c;
+            this.ResumeServices = c;});
+  
+
+      };
     } 
   }
 }
