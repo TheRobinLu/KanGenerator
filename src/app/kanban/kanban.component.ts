@@ -14,6 +14,7 @@ import { IDBVersion } from '../Interface/IDBVersion';
 import { IService } from '../Interface/IService';
 import { IFile } from '../Interface/IFile';
 import { ThrowStmt } from '@angular/compiler';
+import { IAlert } from '../Interface/IAlert';
   
 @Component({
   selector: 'app-kanban',
@@ -34,6 +35,10 @@ export class KanbanComponent implements OnInit {
   id: number = 0;
   test: string = "";
   jstring: string[] ;
+  showModal_sql: boolean;
+  showModal_copy:boolean;
+  showModal_msg:boolean;
+  alert: IAlert;
 
   //dbverForm: FormGroup;
  
@@ -50,8 +55,6 @@ export class KanbanComponent implements OnInit {
   ngOnInit() 
   {
 
-
-
     this.Initial();
     //this.PostInitial();
   }
@@ -66,6 +69,19 @@ export class KanbanComponent implements OnInit {
   Save(): boolean 
   {
     this.kanApiService.postKan(this.kan).subscribe();
+
+    this.alert = {
+      title: "KanBan Generator",
+      message:"KanBan Job Configuration Has Been Saved Succsessfully.",
+      style: "Information",
+      btnOK:true,
+      btnYes: false,
+      btnNo: false,
+      btnCancel:false,
+
+    }
+
+    this.showModal_msg = true;
     
     return true;
   }
@@ -75,6 +91,21 @@ export class KanbanComponent implements OnInit {
     this.kan.projectId = null;
     this.kan.projectName = "";
     this.kan.status = "New";
+
+    this.alert = {
+      title: "KanBan Generator",
+      message:"New KanBan Job Configuration Has Been cloned Succsessfully.",
+      style: "Information",
+      btnOK:true,
+      btnYes: false,
+      btnNo: false,
+      btnCancel:false,
+
+    }
+
+    this.showModal_msg = true;
+
+
   }
 
   Generate() 
@@ -84,6 +115,19 @@ export class KanbanComponent implements OnInit {
         console.log('a: ' + JSON.stringify(a));
         }
       )
+
+      this.alert = {
+        title: "KanBan Generator",
+        message:"KanBan Job Has Been Generated Succsessfully.",
+        style: "Information",
+        btnOK:true,
+        btnYes: false,
+        btnNo: false,
+        btnCancel:false,
+  
+      }
+  
+      this.showModal_msg = true;
 
   }
 
@@ -124,7 +168,7 @@ export class KanbanComponent implements OnInit {
         {
           this.kan.stopServiceList.push(stopSr);
           if (stopSr.serviceName == 'IIS') 
-          {temp = "IISReset\r\n";}
+          {temp =  temp + "IISReset\r\n";}
           else
           {
             temp = temp + "taskkill /F /IM " + stopSr.serviceExe + "\r\n";
@@ -147,7 +191,7 @@ export class KanbanComponent implements OnInit {
         {
           this.kan.resumeServiceList.push(resumeSr);
           if (resumeSr.serviceName == 'IIS') 
-          {temp = "IISReset\r\n";}
+          {temp =  temp + "IISReset\r\n";}
           else
           {
             temp = temp + resumeSr.path + resumeSr.serviceExe + "\r\n";
@@ -187,31 +231,31 @@ export class KanbanComponent implements OnInit {
           //this.kan.copyFiles = [];
           sortfiles.forEach(file => {
             if (file.fileOrPath == 'D')
+            {
+              let existFile: IFile = this.kan.copyFiles.find(inFile => inFile.fileName == file.fileName);
+              
+              if (existFile == undefined )
               {
-                let existFile: IFile = this.kan.copyFiles.find(inFile => inFile.fileName == file.fileName);
-                
-                if (existFile == undefined )
-                {
-                  this.kan.copyFiles.push(file);
-                }
-                else
-                {
-                  existFile = file;
-                }
+                this.kan.copyFiles.push(file);
               }
+              else
+              {
+                existFile = file;
+              }
+            }
             else if(!file.fileName.includes(this.kan.projectName))
+            {
+              let existFile: IFile = this.kan.copyFiles.find(inFile => inFile.fileName == file.fileName);
+              
+              if (existFile == undefined )
               {
-                let existFile: IFile = this.kan.copyFiles.find(inFile => inFile.fileName == file.fileName);
-                
-                if (existFile == undefined )
-                {
-                  this.kan.copyFiles.push(file);
-                }
-                else
-                {
-                  existFile = file;
-                }                
+                this.kan.copyFiles.push(file);
               }
+              else
+              {
+                existFile = file;
+              }                
+            }
           });
 
           this.kan.copyFiles.filter(s => s.selected);
@@ -323,6 +367,11 @@ export class KanbanComponent implements OnInit {
 
 
 
+  }
+
+  alertResponse(action:number)
+  {
+    this.showModal_msg = false;
   }
 
   Initial() {

@@ -10,8 +10,10 @@ import { AppComponent } from './app.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { KanbanComponent } from './kanban/kanban.component';
 import { JoblistComponent } from './joblist/joblist.component';
-import { DbversionComponent } from './dbversion/dbversion.component';
 import { SettingComponent } from './setting/setting.component';
+import { AlertBoxComponent } from './component/alert-box/alert-box.component';
+import { DbversionsComponent } from './component/dbversions/dbversions.component';
+import { PracticeComponent } from './component/practice/practice.component';
 
 
 @NgModule({
@@ -20,8 +22,10 @@ import { SettingComponent } from './setting/setting.component';
     WelcomeComponent,
     KanbanComponent,
     JoblistComponent,
-    DbversionComponent,
     SettingComponent,
+    AlertBoxComponent,
+    DbversionsComponent,
+    PracticeComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,6 +38,8 @@ import { SettingComponent } from './setting/setting.component';
       {path:'joblist', component: JoblistComponent},
       {path:'kanban/:id', component: KanbanComponent},
       {path:'setting', component: SettingComponent},
+      {path:'Practice', component: PracticeComponent},
+      {path:'db', component: DbversionsComponent},
       {path: '**', redirectTo: 'welcome', pathMatch: 'full' }])
   ],
   providers: [],

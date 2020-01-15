@@ -1,0 +1,62 @@
+<!-- <div *ngIf="alert" class="modal fade" id="messageBox" [ngClass]="{'show':true}" tabindex="-1"
+    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div *ngIf="alert" class="modal-content"> 
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{alert.title }}</h5>
+                <button type="button" class="close" (click)="showModal_msg = false" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="alert?.style == 'Information' "class= 'fa fa-info-circle fa-2x text-info'> </div>
+                <div *ngIf="alert?.style == 'Question'" class= 'fa fa-question-circle text-secondary'></div> 
+                <div *ngIf="alert?.style == 'Warning' "class= 'fa fa-exclamation-triangle text-warning'></div> 
+                <div *ngIf="alert?.style == 'Error' " class= 'fa fa-window-close text-danger'></div> 
+                <h5>{{alert.message}} </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class = "btn btn-primary"  (click)="alertResponse(0)" (click)="showModal_msg = false"
+                    *ngIf="alert.btnOK">OK</button>
+                <button type="button" class="btn btn-primary"  (click)="alertResponse(1)" (click)="showModal_msg = false"
+                    *ngIf="alert.btnYes">Yes</button>
+                <button type="button" class="btn btn-primary"  (click)="alertResponse(2)" (click)="showModal_msg = false"
+                    *ngIf="alert.btnNo">No</button>
+                <button type="button" class="btn btn-primary"  (click)="alertResponse(3)" (click)="showModal_msg = false"
+                    *ngIf="alert.btnCancel">Cancel</button>           
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="modal-dialog" *ngIf="showModal_msg" role="document">
+
+    <div *ngIf="alert" class="modal-content"> 
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{alert.title }}</h5>
+            <button type="button" class="close" (click)="alertResponse(null)" (click)="showModal_msg = false" data-dismiss="modal"
+               >
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div *ngIf="alert?.style == 'Information' "class= 'fa fa-info-circle fa-2x text-info text-center'> </div>
+            <p *ngIf="alert?.style == 'Question'" class= 'fa fa-question-circle fa-2x  text-center'></p> 
+            <div *ngIf="alert?.style == 'Warning' "class= 'fa fa-exclamation-triangle fa-2x text-warning'></div> 
+            <div *ngIf="alert?.style == 'Error' " class= 'fa fa-window-close fa-2x text-danger'></div> 
+            <h5>{{alert.message}} </h5>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class = "btn btn-primary"  (click)="alertResponse(0)" (click)="showModal_msg = false"
+                *ngIf="alert.btnOK">OK</button>
+            <button type="button" class="btn btn-primary"  (click)="alertResponse(1)" (click)="showModal_msg = false"
+                *ngIf="alert.btnYes">Yes</button>
+            <button type="button" class="btn btn-primary"  (click)="alertResponse(2)" (click)="showModal_msg = false"
+                *ngIf="alert.btnNo">No</button>
+            <button type="button" class="btn btn-primary"  (click)="alertResponse(3)" (click)="showModal_msg = false"
+                *ngIf="alert.btnCancel">Cancel</button>           
+        </div>
+    </div>
+</div>

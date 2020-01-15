@@ -18,12 +18,12 @@ import { ISetting } from '../Interface/ISetting';
 export class KanGApiService {
 
   //private KanUrl = 'http://localhost:7361/kan';
-  private baseUrl = 'http://localhost:16744';
-  private KanUrl = 'http://localhost:16744/kans';
-  private dbVerUrl = 'http://localhost:16744/DBVersion';
-  private serviceUrl = 'http://localhost:16744/Services';
-  private filesUrl = 'http://localhost:16744/GetFile';
-  private generatorsUrl = 'http://localhost:16744/Gen';
+  private baseUrl = 'http://dvaza016/kanAPI';
+  private KanUrl = this.baseUrl + '/kans';
+  private dbVerUrl = this.baseUrl + '/DBVersion';
+  private serviceUrl = this.baseUrl + '/Services';
+  private filesUrl = this.baseUrl + '/GetFile';
+  private generatorsUrl = this.baseUrl + '/Gen';
   
   constructor(private http: HttpClient) { }
 

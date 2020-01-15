@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DbversionComponent } from './dbversion.component';
+import { AlertBoxComponent } from './alert-box.component';
 
-describe('DbversionComponent', () => {
-  let component: DbversionComponent;
-  let fixture: ComponentFixture<DbversionComponent>;
+describe('AlertBoxComponent', () => {
+  let component: AlertBoxComponent;
+  let fixture: ComponentFixture<AlertBoxComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DbversionComponent ]
+      declarations: [ AlertBoxComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DbversionComponent);
+    fixture = TestBed.createComponent(AlertBoxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
