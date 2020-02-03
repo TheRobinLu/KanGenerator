@@ -39,6 +39,7 @@ export class KanbanComponent implements OnInit {
   showModal_copy:boolean;
   showModal_msg:boolean;
   alert: IAlert;
+  applyToList: string[] = ["Both","Server","WorkStation"]
 
   //dbverForm: FormGroup;
  
@@ -296,8 +297,69 @@ export class KanbanComponent implements OnInit {
     this.kan.copyFile = "";
     this.kan.copyFiles.forEach(
       file => {
-        this.kan.copyFile = file.selected? this.kan.copyFile + 'Xcopy c:\\PropharmTemp\\' + file.fileName + ' "' 
-        + file.destination + '" /y \r\n': this.kan.copyFile;
+        if(file.selected)
+        {
+          if(file.fileOrPath = 'F')
+          {
+            if(file.applyTo = "Server")
+            {
+              let ifServer = 'IF %isServer% = Yes ( ^^CopyFileScript^^)'
+              let backup = 'if exist "' + file.destination + file.fileName+ '.' + this.kan.projectName + '" DEL "' + + file.destination + file.fileName+ '.' + this.kan.projectName + '\r\n'
+              backup = backup + 'REN "' + file.destination + file.fileName + '" "' + file.destination + file.fileName+ '.' + this.kan.projectName + '"\r\n'
+              let copyscript = 'COPY /Y "c:\\PropharmTemp\\' + file.fileName + '" "' + file.destination + '"\r\n'
+              copyscript = ifServer.replace('^^CopyFileScript^^',copyscript)
+              this.kan.copyFile = this.kan.copyFile + backup + copyscript
+
+            }
+            else if (file.applyTo = "WorkStation")
+            {
+              let ifSWorkStation = 'IF %isWorkStation% = Yes ( ^^CopyFileScript^^)'
+              let backup = 'if exist "' + file.destination + file.fileName+ '.' + this.kan.projectName + '" DEL "' + + file.destination + file.fileName+ '.' + this.kan.projectName + '\r\n'
+              backup = backup + 'REN "' + file.destination + file.fileName + '" "' + file.destination + file.fileName+ '.' + this.kan.projectName + '"\r\n'
+              let copyscript = 'COPY /Y "c:\\PropharmTemp\\' + file.fileName + '" "' + file.destination + '"\r\n'
+              copyscript = ifSWorkStation.replace('^^CopyFileScript^^',copyscript)
+              this.kan.copyFile = this.kan.copyFile + backup + copyscript
+            }
+            else 
+            {
+              let backup = 'if exist "' + file.destination + file.fileName+ '.' + this.kan.projectName + '" DEL "' + + file.destination + file.fileName+ '.' + this.kan.projectName + '\r\n'
+              backup = backup + 'REN "' + file.destination + file.fileName + '" "' + file.destination + file.fileName+ '.' + this.kan.projectName + '"\r\n'
+              let copyscript = 'COPY /Y "c:\\PropharmTemp\\' + file.fileName + '" "' + file.destination + '"\r\n'
+              this.kan.copyFile = this.kan.copyFile + backup + copyscript
+             }
+          }
+          else
+          {
+            if(file.applyTo = "Server")
+            {
+              let ifServer = 'IF %isServer% = Yes ( ^^CopyFileScript^^)'
+              let backup = 'if exist "' + file.destination + file.fileName+ '.' + this.kan.projectName + '" rmdir /q/s "' + + file.destination + file.fileName+ '.' + this.kan.projectName + '\r\n'
+              backup = backup + 'XCOPY /Y /S "' + file.destination + file.fileName + '" "' + file.destination + file.fileName+ '_' + this.kan.projectName + '"\r\n'
+              let copyscript = 'XCOPY /Y /S "c:\\PropharmTemp\\' + file.fileName + '" "' + file.destination + '"\r\n'
+              copyscript = ifServer.replace('^^CopyFileScript^^',copyscript)
+              this.kan.copyFile = this.kan.copyFile + backup + copyscript
+
+            }
+            else if (file.applyTo = "WorkStation")
+            {
+              let ifSWorkStation = 'IF %isWorkStation% = Yes ( ^^CopyFileScript^^)'
+              let backup = 'if exist "' + file.destination + file.fileName+ '.' + this.kan.projectName + '" rmdir /q/s "' + + file.destination + file.fileName+ '.' + this.kan.projectName + '\r\n'
+              backup = backup + 'XCOPY /Y /S "' + file.destination + file.fileName + '" "' + file.destination + file.fileName+ '_' + this.kan.projectName + '"\r\n'
+              let copyscript = 'XCOPY /Y /S "c:\\PropharmTemp\\' + file.fileName + '" "' + file.destination + '"\r\n'
+              copyscript = ifSWorkStation.replace('^^CopyFileScript^^',copyscript)
+              this.kan.copyFile = this.kan.copyFile + backup + copyscript
+            }
+            else 
+            {
+              let backup = 'if exist "' + file.destination + file.fileName+ '.' + this.kan.projectName + '" rmdir /q/s "' + + file.destination + file.fileName+ '.' + this.kan.projectName + '\r\n'
+              backup = backup + 'XCOPY /Y /S "' + file.destination + file.fileName + '" "' + file.destination + file.fileName+ '_' + this.kan.projectName + '"\r\n'
+              let copyscript = 'XCOPY /Y /S "c:\\PropharmTemp\\' + file.fileName + '" "' + file.destination + '"\r\n'
+              this.kan.copyFile = this.kan.copyFile + backup + copyscript
+            }            
+
+          }
+        }
+
       }
     )
     this.kan.copyFiles = this.kan.copyFiles.filter(s => s.selected);

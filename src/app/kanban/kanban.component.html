@@ -198,6 +198,11 @@
                             <td><input placeholder="Destination" type="text" size="60" name="{{afile.fileName}}{{i}}"
                                     id="{{afile.fileName}}{{i}}" [(ngModel)]="afile.destination"> </td>
                             <!-- <td> {{afile.selected}} </td>  -->
+                            <td>
+                                <select class= "mx-2 browser-default custom-select-sm" [(ngModel)]="afile.applyTo">
+                                    <Option *ngFor="let item of applyToList" [value] = "item"> {{item}} </Option>
+                                </select>
+                            </td>
                         </tr>
                     </tbody>
                 </div>
