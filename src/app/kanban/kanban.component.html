@@ -1,12 +1,13 @@
-<form>
+<form  *ngIf="kan" >
+    <h2 class= "text-center"> KanBan Job Configuration</h2>
+    <hr>
     <div class="container">
-        <div class="row my-2 d-flex justify-content-left text-left">
-            <div class="col-md-2">Kan ID</div>
-            <input class="col-md-2" placeholder="###" type="int" name="projectID" [(ngModel)]="kan.projectId" />
-            <div class="col-md-2"></div>
-            <div class="col-md-2">Kan Name</div>
-            <input class="col-md-4" placeholder="KAN######" type="text" name="projectName"
-                [(ngModel)]="kan.projectName" />
+        <div class="row my-2 d-flex justify-content-left text-left" >
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4 pt-2"><h6>KanBan ID:</h6></div>
+                    <input class="col-md-6 form-control form-rounded" placeholder="###" type="number" name="projectID" required
+                        [(ngModel)]="kan.projectId" (change) = "projectIdChange()" #projectId="ngModel">
 
             <p>Add a test paragraph</p>
         </div>
@@ -16,59 +17,260 @@
                 [(ngModel)]="kan.dBVersion" />
 
         </div>
-        <div class="row  my-2 d-flex justify-content-left text-left">
-            <div class="col-md-3">Description</div>
-            <input class="col-md-12" placeholder="Description" type="text" name="description"
-                [(ngModel)]="kan.description" />
 
+        <div class="row  my-2 d-flex justify-content-left text-left">
+            <div class="col-md-2 pt-2"><h6>Database Version:</h6></div>
+            <input class="col-md-10  px-3  form-control form-rounded" placeholder="Database Version" type="text" name="dBVersion" 
+                [(ngModel)]="kan.dBVersion" disabled />
+
+            <ul class="list-inline" *ngFor="let dbver of dbversions; let i = index">
+                <li class="list-inline-item">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="{{dbver.version}}" class="custom-control-input"
+                            id="{{dbver.version}}" [checked]="dbver.compatible"
+                            (change)="dbver.compatible = !dbver.compatible " (change)="dbVersionChecked() ">
+                        <label class="custom-control-label  mx-3" for="{{dbver.version}}">{{dbver.version}}
+                        </label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- {{dbversions|json}} -->
+
+        <div class="row  my-2 d-flex justify-content-left text-left">
+            <div class="col-md-6 px-3">
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <div class="col-md-3"><h6>Description:</h6></div>
+                    <textarea class=" form-control form-rounded" rows="3" placeholder="Description" type="text" name="description"
+                        [(ngModel)]="kan.description">
+                    </textarea>
+                </div>
+            </div>
+            <!-- <div class="col-md-1"></div> -->
+            <div class="col-md-6 px-3">
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <div class="col-md-6"><h6>Modification History:</h6></div>
+                    <textarea class=" form-control form-rounded" rows="3"
+                        placeholder="Sep 3, 2000    Jams Bond   2.5.0.2     KAN000126 Add new DB script" type="text"
+                        name="modificationHistory"
+                        [(ngModel)]="kan.modificationHistory">Date        Developer       Version     Comments</textarea>
+                </div>
+            </div>
         </div>
 
-
         <div class="row  my-2 d-flex justify-content-left text-left">
-            <div class="col-md-3">modification History</div>
-            <textarea class="form-control" rows="3"
-                placeholder="Sep 3, 2000    Jams Bond   2.5.0.2     KAN000126 Add new DB script" type="text"
-                name="modificationHistory"
-                [(ngModel)]="kan.modificationHistory">Date        Developer       Version     comments</textarea>
+
+            <div class="col-md-6 px-3">
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <div class="col-md-12"><h6>Script for Stoping Services:</h6></div>
+                    <textarea class=" form-control form-rounded col-md-12" rows="3" type="text" name="stopServices"
+                        [(ngModel)]="kan.stopServices"></textarea>
+                </div>
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <ul class="list-inline" *ngFor="let stopSv of StopServices; let i = index">
+                        <li class="list-inline-item">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="{{stopSv.serviceName}}" class="custom-control-input"
+                                    id="{{stopSv.serviceName}}" [checked]="stopSv.onOff"
+                                    (change)="stopSv.onOff = !stopSv.onOff " (change)="stopServiceChecked() ">
+                                <label class="custom-control-label  mx-3"
+                                    for="{{stopSv.serviceName}}">{{stopSv.serviceName}}
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 px-3">
+                <div class="row  my-2 d-flex justify-content-left text-left">
+                    <div class="col-md-12"><h6>Script for Resuming Services:</h6></div>
+                    <textarea class=" form-control form-rounded col-md-12" rows="3" type="text" name="resumeService"
+                        [(ngModel)]="kan.resumeServices"></textarea>
+                </div>
+                <div class="row  my-2 ">
+                    <ul class="list-inline" *ngFor="let resumeSv of ResumeServices; let i = index">
+                        <li class="list-inline-item">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="{{resumeSv.serviceName}}" class="custom-control-input"
+                                    id="{{resumeSv.serviceName}}-" [checked]="resumeSv.onOff"
+                                    (change)="resumeSv.onOff = !resumeSv.onOff " (change)="resumeServiceChecked() ">
+                                <label class="custom-control-label  mx-3"
+                                    for="{{resumeSv.serviceName}}-">{{resumeSv.serviceName}}
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <div class="row  my-2 d-flex justify-content-left text-left">
-            <div class="col-md-3">Script for stoping Services</div>
-            <div class="col-md-3"></div>
-            <div class="col-md-3">Script for copying files</div>
-            <textarea class="form-control col-md-5" rows="3" type="text" name="stopServices"
-                [(ngModel)]="kan.stopServices"></textarea>
-            <div class="col-md-1"></div>
-            <textarea class="form-control  col-md-6" rows="3" type="text" name="copyFile" [(ngModel)]="kan.copyFile"></textarea>
-        </div>
+            <div class="col-md-10"><h6>Script for Running Query:</h6></div>
+            <div class="col-md-2">
+                <button class="btn-info fa fa-database fa-lg" (click)="showModal_sql=true"
+                    (click)="getFiles('SQL')" data-toggle="modal" data-target="#sqlFileModal">
 
-
-
-        <div class="row  my-2 d-flex justify-content-left text-left">
-            <div class="col-md-3">Script for running query</div>
-            <div class="col-md-3"></div>
-            <div class="col-md-3">Script for resuming services</div>
-            <textarea class="form-control col-md-5" rows="3" type="text" name="runQuery" 
+                </button>
+            </div>
+            <textarea class=" form-control form-rounded col-md-12" rows="3" type="text" name="runQuery"
                 [(ngModel)]="kan.runQuery"></textarea>
-            <div class="col-md-1"></div>
-            <textarea class="form-control col-md-6" rows="3" type="text" name="resumeService"
-            [(ngModel)]="kan.resumeService"></textarea>
+        </div>
+
+
+        <div class="row  my-2 d-flex justify-content-left text-left">
+            <div class="col-md-10"><h6>Script for Copying Files:</h6></div>
+            <div class="col-md-2">
+                <button class="btn-info fa fa-file-text fa-lg" (click)="showModal_copy=true"
+                    (click)="getFiles('PRG')" data-toggle="modal" data-target="#copyFileModal">
+
+                </button>
+            </div>
+            <textarea class=" form-control form-rounded col-md-12" rows="3" type="text" name="copyFile"
+                [(ngModel)]="kan.copyFile"></textarea>
         </div>
 
         <div class="row  my-2 d-flex justify-content-left text-left">
-            <div class="col-md-3">Script for cleaning up</div>
-            <textarea class="form-control" rows="3" type="text" name="cleanUp" [(ngModel)]="kan.cleanUp"></textarea>
+            <div class="col-md-3"><h6>Script for Cleaning Up:</h6></div>
+            <div class="col-md-7"></div>
+            <div class="col-md-2">
+                <button class="btn-info fa fa-trash-o fa-lg"
+                    (click)="cleanUpScript()" data-toggle="modal" data-target="#copyFileModal">
+
+                </button>
+            </div>
+           <textarea class=" form-control form-rounded" rows="3" type="text" name="cleanUp" [(ngModel)]="kan.cleanUp"></textarea>
         </div>
     </div>
 
-    
 
-    <div>
+    <div class="fixed-bottom mb-5 pb-3">
         <button class="btn btn-primary mx-1" (click)="Save()">Save</button>
-        <button class="btn btn-primary mx-1" (click)="Clone()" >Clone</button>
-
+        <button class="btn btn-primary mx-1" (click)="Clone()">Clone</button>
         <button class="btn btn-primary mx-1" (click)="Generate()">Generate</button>
+
     </div>
+
+
+    <!-- Modal copy file-->
+    <div class="modal fade" id="copyFileModal" [ngClass]="{'show':showModal_copy}" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="true" *ngIf="kan">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Copy Files</h5>
+                    <button type="button" class="close" (click)="showModal_copy = false" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <tbody>
+                        <tr *ngFor='let afile of kan.copyFiles; let i = index'>
+                            <td class="mp-2">
+                                <div class="custom-control custom-checkbox mx-4">
+                                    <input type="checkbox" name="{{afile.fileName}}" id="{{afile.fileName}}"
+                                        [checked]="afile.selected" (change)="afile.selected = !afile.selected">
+                                </div>
+                            </td>
+                            <td class="px-2 text-left"> {{afile.fileName}} </td>
+                            <td class="px-2"> 
+                                <label *ngIf="afile.fileOrPath =='F'" class="fa fa-file-text-o" > </label> 
+                                <label *ngIf="afile.fileOrPath =='D'" class="fa fa-folder-open-o" > </label> 
+                            </td>
+
+                            <td><input placeholder="Destination" type="text" size="60" name="{{afile.fileName}}{{i}}"
+                                    id="{{afile.fileName}}{{i}}" [(ngModel)]="afile.destination"> </td>
+                            <!-- <td> {{afile.selected}} </td>  -->
+                            <td>
+                                <select class= "mx-2 browser-default custom-select-sm" [(ngModel)]="afile.applyTo">
+                                    <Option *ngFor="let item of applyToList" [value] = "item"> {{item}} </Option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="showModal_copy = false"
+                        data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary"  (click)="copyFileScript()" (click)="showModal_copy = false"> Script </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="sqlFileModal" [ngClass]="{'show':showModal_sql}" tabindex="-1"
+        role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" *ngIf="kan">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">SQL Files</h5>
+                    <button type="button" class="close" (click)="showModal_sql = false" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <tbody>
+                        <tr *ngFor='let afile of kan.sqlFiles; let i = index'>
+                            <td class="mp-2">
+                                <div class="custom-control custom-checkbox mx-4">
+                                    <input type="checkbox" name="{{afile.fileName}}sql" id="{{afile.fileName}}sql"
+                                        [checked]="afile.selected" (change)="afile.selected = !afile.selected">
+                                </div>
+                            </td>
+                            <td class="px-2 text-left"> {{afile.fileName}} </td>
+
+                        </tr>
+                    </tbody>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="showModal_sql = false"
+                        data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary"  (click)="exeQueryScript()" (click)="showModal_sql = false"> Script </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div *ngIf="alert" class="modal fade" id="messageBox" [ngClass]="{'show':showModal_msg}" tabindex="-1"
+        role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{alert.title }}</h5>
+                    <button type="button" class="close" (click)="showModal_msg = false" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div *ngIf="alert?.style == 'Information' "class= 'fa fa-info-circle fa-2x text-info'> </div>
+                    <div *ngIf="alert?.style == 'Question'" class= 'fa fa-question-circle text-secondary'></div> 
+                    <div *ngIf="alert?.style == 'Warning' "class= 'fa fa-exclamation-triangle text-warning'></div> 
+                    <div *ngIf="alert?.style == 'Error' " class= 'fa fa-window-close text-danger'></div> 
+                    <h5>{{alert.message}} </h5>
+                </div>
+                 <div class="modal-footer">
+                   <button type="button" class = "btn btn-primary"  (click)="alertResponse(0)" (click)="showModal_msg = false"
+                    *ngIf="alert.btnOK">OK</button>
+                     <button type="button" class="btn btn-primary"  (click)="alertResponse(1)" (click)="showModal_msg = false"
+                    *ngIf="alert.btnYes">Yes</button>
+                    <button type="button" class="btn btn-primary"  (click)="alertResponse(2)" (click)="showModal_msg = false"
+                    *ngIf="alert.btnNo">No</button>
+                    <button type="button" class="btn btn-primary"  (click)="alertResponse(3)" (click)="showModal_msg = false"
+                    *ngIf="alert.btnCancel">Cancel</button>           
+                </div>
+            </div> 
+        </div>
+    </div>
+
 
 
 </form>

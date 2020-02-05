@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 
 
-import { RecentKansService} from '../Service/recent-kans.service';
+import { KanGApiService} from '../Service/kan-gapi.service';
 import {IRecentKan} from '../Interface/IRecentKan';
 
 import { Observable } from 'rxjs';
@@ -12,23 +12,22 @@ import {map, filter} from 'rxjs/operators';
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.css'],
-  providers: [RecentKansService]
+  providers: [KanGApiService]
 })
 export class WelcomeComponent implements OnInit {
 
   recentKans: IRecentKan[];
+  maxRecent: number;
   //LastRecents: IRecentKan[];
   errorMessage: string;
 
-  constructor(private recentKansService: RecentKansService){
+  constructor(private kanGApiService: KanGApiService){
 
   }
 
 
   ngOnInit() {
-    this.recentKansService.getRecentKans().subscribe(
-      // tslint:disable-next-line: no-shadowed-variable
-      // tslint:disable-next-line: only-arrow-functions
+    this.kanGApiService.getRecentKans().subscribe(
 
       a => {this.recentKans = a.sort( function( a, b) {
 
@@ -36,6 +35,14 @@ export class WelcomeComponent implements OnInit {
         error => this.errorMessage = error as any
 
     );
+
+    this.kanGApiService.getSetting().subscribe(
+      a => {this.maxRecent = a.maxRecent ,
+       error => this.errorMessage = error as any;
+       
+       console.log("Retrieve Setting for Max Recent: " + JSON.stringify(this.maxRecent));
+     }
+   );
   }
 
 }

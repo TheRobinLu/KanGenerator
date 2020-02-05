@@ -1,0 +1,43 @@
+
+.modal {
+text-align: center;
+}
+
+.modal.show{
+    display: block;
+}
+
+.fade.in{
+    opacity: 0.5;
+
+}
+ .modal-content
+{
+     box-shadow: 8px 8px 20px #535353; 
+}  
+
+
+
+ .modal-dialog{
+    max-width: 940px !important;
+
+} 
+
+.modal-header {
+    background-color: rgb(110, 127, 143);
+    padding:16px 16px;
+    color:rgb(233, 243, 250);
+  }
+
+
+ .modal-body {
+    background-color: rgb(171, 213, 250);
+    padding:16px 16px;
+    color: rgb(1, 31, 58);
+ }
+
+ .modal-footer
+ {
+    background-color: rgb(110, 127, 143);;
+ }
+

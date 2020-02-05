@@ -1,0 +1,34 @@
+<div>
+<h4> Nested component</h4>
+<div> {{dbVersions|json}}</div>
+<div> <app-dbversions [dbVersions] = 'dbVersions' [anumber] = 5> </app-dbversions></div>
+<!-- <div> <app-dbversions  > </app-dbversions></div> -->
+</div>
+
+
+
+<hr>
+
+<h4> Nested Modal</h4>
+<div>  <button class="btn btn-primary mx-1" (click) = "Alert()">Alert</button>
+</div>
+
+<!-- 
+<div  class="modal fade" id="messageBox" [ngClass]="{'show':true}" tabindex="-1"
+    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    aaa
+    <app-alert-box [alert] = 'alert'
+                (response) = 'onNotify($event)'
+                ></app-alert-box>
+</div> -->
+
+
+
+<div >
+
+
+<app-alert-box [alert] = 'alert' [showModal_msg] = 'showModal_msg'
+(response) = 'getResponse($event)'
+></app-alert-box>
+</div>
+<h6>{{action}}</h6>

@@ -12,7 +12,7 @@ import {IRecentKan} from '../Interface/IRecentKan';
   providedIn: 'root'
 })
 export class RecentKansService {
-  private recentKanUrl = 'https://localhost:44358/Kans/';
+  private recentKanUrl = 'assets/RecentKan.json';
 
   getRecentKans():Observable<IRecentKan[]> {
     return this.http.get<IRecentKan[]>(this.recentKanUrl).pipe(

@@ -1,0 +1,147 @@
+<form   *ngIf="setting" >
+    <div class="container">
+        <h3 class="text-center">KanBan Generator Settings</h3>
+        <hr>
+        <div class="row my-2 d-flex justify-content-left text-left" >
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-md-8 pt-2"><h6>Number of Recent Projects:</h6></div>
+                    <input class="col-md-2 form-control form-rounded" placeholder="#" type="number" name="maxRecent" required
+                        [(ngModel)]="setting.maxRecent"  #maxRecent="ngModel">
+
+                </div>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div  class="col-md-6 my-0 py-0" *ngIf="maxRecent.invalid && (maxRecent.dirty || maxRecent.touched)"
+                        class="alert alert-danger  my-0 py-0">
+
+                        <small  *ngIf="maxRecent.errors.required">
+                            This number is required.
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+            <!-- </input> -->
+            <!-- <div class="col-md-2"></div> -->
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-md-5 pt-2"><h6>KanBan Package Root Path:</h6></div>
+                    <input class="col-md-7  px-3 form-control form-rounded"  type="text" name="kanRootPath"
+                        [(ngModel)]="setting.kanRootPath" />
+                </div>
+            </div>
+
+        </div>
+        <hr>
+        <div class="row my-2 d-flex justify-content-left text-left" >
+            <div class="col-md-1">
+                <button class="fa-lg btn-info fa fa-plus-square-o" (click)="AddDBVersion()"></button>
+            </div>  
+
+            <div class="col-md-5 py-2">
+                <h6>Compatible Database Version: </h6>  
+            </div>       
+        </div>
+        <hr>
+        <div class="row my-2 d-flex justify-content-left text-left" >
+            <div class="col-md-5">
+                <tbody>
+
+                    <tr *ngFor='let ver of setting.dbVersions; let i=index'  >
+                        <td style="padding-top:5px" ><button class="fa-lg btn-info mx-1 fa fa-trash-o" (click)="DeleteDBVersion(i)"></button>
+                            <button class="btn-info mx-1 fa fa-pencil-square-o fa-lg" (click)="ModifyDBVersion(i)"></button>
+                        </td>
+                        <td style="padding-left:5px"> 
+                            {{ver.version}} 
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="hasNewDB">
+                        <td style="padding-top:5px" >
+                            <button class="fa-lg btn-info mx-1 fa fa-trash-o" (click)="CancelDBVersion()"></button>
+                            <button class="fa-lg btn-info mx-1 fa fa-floppy-o" (click)="SaveDBVersion()"></button>
+                            
+                        </td>
+                        <td style="padding-left:5px"> 
+                            <input type="text" class = "form-control form-rounded" name="newDBVersion"
+                            [(ngModel)]="newDBVersion.version" #newDBVersion.version="ngModel">
+    
+                        </td>
+                    </tr>
+                
+                    <br>
+
+            
+              </tbody>
+            </div>
+                    
+        </div>
+
+        <hr>
+        <div class="row my-2 d-flex justify-content-left text-left" >
+            <div class="col-md-1">
+                <button class="fa-lg btn-info fa fa-plus-square-o" (click)="AddService()"></button>
+            </div>  
+            <div class="col-md-10  py-2">
+                <h6>PharmaClik Applications and Services: </h6>  
+            </div>       
+        </div>
+        <hr>
+        <div class="row my-2 d-flex justify-content-left text-left" >
+            <div class="col-md-12">
+                <tbody>
+                    <tr *ngFor='let service of setting.services; let i=index'>
+                        <td style="padding-top:5px" >
+                            <button class="fa-lg btn-info mx-1 fa fa-trash-o" (click)="DeleteService(i)"></button>
+                            <button class="fa-lg btn-info mx-1 fa fa-pencil-square-o" (click)="ModifyService(i)"></button>
+                        </td>
+                        <td class=" px-1"> 
+                            {{service.serviceName}} 
+                        </td>
+                        <td class=" px-1">  
+                            {{service.serviceExe}}
+                        </td>
+                        <td class=" px-1"> 
+                            {{service.path}}
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="hasNewService">
+                        <td style="padding-top:5px" >
+                            <button class="fa-lg btn-info mx-1 fa fa-trash-o" (click)="CancelService()"></button>
+                            <button class="fa-lg btn-info mx-1 fa fa-floppy-o" (click)="SaveService()"></button>
+                            
+                        </td>
+                        <td style="padding-left:5px"> 
+                            <input type="text" class=" form-control form-rounded" name="newServiceName"
+                            [(ngModel)]="newService.serviceName" #newService.serviceName="ngModel">
+    
+                        </td>
+                        <td style="padding-left:5px"> 
+                            <input type="text" class=" form-control form-rounded" name="newServiceExe"
+                            [(ngModel)]="newService.serviceExe" #newService.serviceExe="ngModel">
+    
+                        </td>
+                        <td style="padding-left:5px"> 
+                            <input type="text" class="form-control form-rounded" name="newPath" size="60"
+                            [(ngModel)]="newService.path" #newService.path="ngModel">
+    
+                        </td>
+                    </tr>
+                    <br>
+            
+                </tbody>
+            </div>
+                    
+        </div>
+
+    </div>
+
+    <div class="fixed-bottom mb-5 pb-3">
+        <button class="btn btn-primary mx-4 " (click)="SaveSetting()">Save</button>
+
+    </div>
+
+
+</form>
