@@ -28,6 +28,11 @@ export class KanbanComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    // this._connection = this._connection || new HubConnectionBuilder()
+    //     .withUrl('https://localhost:44358', options)
+    //     .build();
+
     this.Initial();
   }
 

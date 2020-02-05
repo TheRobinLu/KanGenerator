@@ -18,7 +18,7 @@ import { JoblistComponent } from './joblist/joblist.component';
     JoblistComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule ,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
